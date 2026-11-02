@@ -514,7 +514,7 @@ function Pph21Page() {
       source: 'manual' as const,
       locale: modalData.locale ?? i18n.language,
       formSnapshot: modalData.formSnapshot,
-    } as TaxReceipt
+    }
   }
 
   const handleSaveReceipt = ({

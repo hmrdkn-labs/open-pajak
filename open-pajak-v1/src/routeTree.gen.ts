@@ -9,37 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as PpnbmRouteImport } from './routes/ppnbm'
-import { Route as PpnRouteImport } from './routes/ppn'
-import { Route as Pph42RouteImport } from './routes/pph4-2'
-import { Route as Pph23RouteImport } from './routes/pph23'
-import { Route as Pph22RouteImport } from './routes/pph22'
-import { Route as Pph21RouteImport } from './routes/pph21'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as Pph21RouteImport } from './routes/pph21'
+import { Route as Pph22RouteImport } from './routes/pph22'
+import { Route as Pph23RouteImport } from './routes/pph23'
+import { Route as Pph42RouteImport } from './routes/pph4-2'
+import { Route as PpnRouteImport } from './routes/ppn'
+import { Route as PpnbmRouteImport } from './routes/ppnbm'
 
-const PpnbmRoute = PpnbmRouteImport.update({
-  id: '/ppnbm',
-  path: '/ppnbm',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PpnRoute = PpnRouteImport.update({
-  id: '/ppn',
-  path: '/ppn',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const Pph42Route = Pph42RouteImport.update({
-  id: '/pph4-2',
-  path: '/pph4-2',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const Pph23Route = Pph23RouteImport.update({
-  id: '/pph23',
-  path: '/pph23',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const Pph22Route = Pph22RouteImport.update({
-  id: '/pph22',
-  path: '/pph22',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const Pph21Route = Pph21RouteImport.update({
@@ -47,9 +27,29 @@ const Pph21Route = Pph21RouteImport.update({
   path: '/pph21',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const Pph22Route = Pph22RouteImport.update({
+  id: '/pph22',
+  path: '/pph22',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Pph23Route = Pph23RouteImport.update({
+  id: '/pph23',
+  path: '/pph23',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Pph42Route = Pph42RouteImport.update({
+  id: '/pph4-2',
+  path: '/pph4-2',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PpnRoute = PpnRouteImport.update({
+  id: '/ppn',
+  path: '/ppn',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PpnbmRoute = PpnbmRouteImport.update({
+  id: '/ppnbm',
+  path: '/ppnbm',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -84,13 +84,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
-    | '/pph21'
-    | '/pph22'
-    | '/pph23'
-    | '/pph4-2'
-    | '/ppn'
-    | '/ppnbm'
+    '/' | '/pph21' | '/pph22' | '/pph23' | '/pph4-2' | '/ppn' | '/ppnbm'
   fileRoutesByTo: FileRoutesByTo
   to: '/' | '/pph21' | '/pph22' | '/pph23' | '/pph4-2' | '/ppn' | '/ppnbm'
   id:
@@ -116,39 +110,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/ppnbm': {
-      id: '/ppnbm'
-      path: '/ppnbm'
-      fullPath: '/ppnbm'
-      preLoaderRoute: typeof PpnbmRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/ppn': {
-      id: '/ppn'
-      path: '/ppn'
-      fullPath: '/ppn'
-      preLoaderRoute: typeof PpnRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/pph4-2': {
-      id: '/pph4-2'
-      path: '/pph4-2'
-      fullPath: '/pph4-2'
-      preLoaderRoute: typeof Pph42RouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/pph23': {
-      id: '/pph23'
-      path: '/pph23'
-      fullPath: '/pph23'
-      preLoaderRoute: typeof Pph23RouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/pph22': {
-      id: '/pph22'
-      path: '/pph22'
-      fullPath: '/pph22'
-      preLoaderRoute: typeof Pph22RouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pph21': {
@@ -158,11 +124,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Pph21RouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/pph22': {
+      id: '/pph22'
+      path: '/pph22'
+      fullPath: '/pph22'
+      preLoaderRoute: typeof Pph22RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pph23': {
+      id: '/pph23'
+      path: '/pph23'
+      fullPath: '/pph23'
+      preLoaderRoute: typeof Pph23RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pph4-2': {
+      id: '/pph4-2'
+      path: '/pph4-2'
+      fullPath: '/pph4-2'
+      preLoaderRoute: typeof Pph42RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ppn': {
+      id: '/ppn'
+      path: '/ppn'
+      fullPath: '/ppn'
+      preLoaderRoute: typeof PpnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ppnbm': {
+      id: '/ppnbm'
+      path: '/ppnbm'
+      fullPath: '/ppnbm'
+      preLoaderRoute: typeof PpnbmRouteImport
       parentRoute: typeof rootRouteImport
     }
   }

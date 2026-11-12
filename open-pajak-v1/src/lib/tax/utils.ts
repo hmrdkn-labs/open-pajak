@@ -3,6 +3,7 @@ import {
   PTKP_TABLE,
   RATE_SCALE,
   TER_BULANAN_TABLE,
+  TER_HARIAN_PASAL17_THRESHOLD,
   TER_HARIAN_TABLE,
 } from './constants'
 
@@ -19,6 +20,7 @@ export function roundDownToThousand(value: number) {
 }
 
 const SCALE_BIGINT = BigInt(RATE_SCALE)
+const FIFTY_PERCENT_BPS = RATE_SCALE / 2
 
 export function applyRate(
   amount: number,
@@ -60,9 +62,17 @@ export function getTerBulananRate(
   return found ? found.rateBps : fallbackRate
 }
 
-export function getTerHarianRate(kategori: string, bruto: number) {
-  const table = TER_HARIAN_TABLE[kategori] ?? TER_HARIAN_TABLE.A
-  const fallbackRate = table.at(-1)?.rateBps ?? 0
-  const found = table.find((row) => bruto <= row.ceiling)
-  return found ? found.rateBps : fallbackRate
+export function getTerHarianRate(bruto: number) {
+  const found = TER_HARIAN_TABLE.find((row) => bruto <= row.ceiling)
+  return found ? found.rateBps : 0
+}
+
+// TER Harian (PP 58/2023 Lampiran dan PMK 168/2023): s.d. Rp2.500.000/hari
+// dikenai tarif tabel di atas; di atas Rp2.500.000/hari dikenai tarif Pasal 17
+// atas 50% penghasilan bruto harian.
+export function hitungPph21Harian(bruto: number) {
+  if (bruto > TER_HARIAN_PASAL17_THRESHOLD) {
+    return hitungPajakPasal17(applyRate(bruto, FIFTY_PERCENT_BPS))
+  }
+  return applyRate(bruto, getTerHarianRate(bruto))
 }

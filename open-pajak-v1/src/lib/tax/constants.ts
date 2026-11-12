@@ -168,14 +168,14 @@ export const TER_HARIAN_TABLE: Array<{ ceiling: number; rateBps: number }> = [
 
 export const TER_HARIAN_PASAL17_THRESHOLD = 2_500_000
 
-export const PPH22_RATES: Record<string, number> = {
+export const PPH22_RATES:= {
   impor: toBps(0.025),
   migas: toBps(0.02),
   bumn: toBps(0.015),
   lainnya: toBps(0.015),
 } as const
 
-export const PPH23_RATES: Record<string, number> = {
+export const PPH23_RATES = {
   jasaTeknik: toBps(0.02),
   jasaKonsultan: toBps(0.04),
   sewaAlat: toBps(0.02),
@@ -183,7 +183,7 @@ export const PPH23_RATES: Record<string, number> = {
   bunga: toBps(0.15),
 } as const
 
-export const PPH4_2_RATES: Record<string, number> = {
+export const PPH4_2_RATES =   {
   sewaTanah: toBps(0.1),
   konstruksi: toBps(0.035),
   restoran: toBps(0.05),
@@ -191,13 +191,13 @@ export const PPH4_2_RATES: Record<string, number> = {
 } as const
 
 export const PPN_RATES_PER_YEAR: Record<string, number> = {
-  '2022': 0.11,
-  '2023': 0.11,
-  '2024': 0.11,
-  '2025': 0.12,
+  '2022': toBps(0.11),
+  '2023': toBps(0.11),
+  '2024': toBps(0.11),
+  '2025': toBps(0.12),
 }
 
-export const PPNBM_RATES: Record<string, number> = {
+export const PPNBM_RATES = {
   kendaraanMewah: toBps(0.2),
   perhiasan: toBps(0.3),
   kapalPesiar: toBps(0.75),

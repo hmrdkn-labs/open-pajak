@@ -168,7 +168,7 @@ export const TER_HARIAN_TABLE: Array<{ ceiling: number; rateBps: number }> = [
 
 export const TER_HARIAN_PASAL17_THRESHOLD = 2_500_000
 
-export const PPH22_RATES:= {
+export const PPH22_RATES = {
   impor: toBps(0.025),
   migas: toBps(0.02),
   bumn: toBps(0.015),
@@ -183,7 +183,7 @@ export const PPH23_RATES = {
   bunga: toBps(0.15),
 } as const
 
-export const PPH4_2_RATES =   {
+export const PPH4_2_RATES = {
   sewaTanah: toBps(0.1),
   konstruksi: toBps(0.035),
   restoran: toBps(0.05),

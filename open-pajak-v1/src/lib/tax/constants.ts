@@ -157,35 +157,25 @@ export const TER_BULANAN_TABLE: Record<
   ],
 }
 
-export const TER_HARIAN_TABLE: Record<
-  string,
-  Array<{ ceiling: number; rateBps: number }>
-> = {
-  A: [
-    { ceiling: 750000, rateBps: toBps(0.0025) },
-    { ceiling: 2500000, rateBps: toBps(0.015) },
-    { ceiling: Number.POSITIVE_INFINITY, rateBps: toBps(0.02) },
-  ],
-  B: [
-    { ceiling: 750000, rateBps: toBps(0.0025) },
-    { ceiling: 2500000, rateBps: toBps(0.0125) },
-    { ceiling: Number.POSITIVE_INFINITY, rateBps: toBps(0.0175) },
-  ],
-  C: [
-    { ceiling: 750000, rateBps: toBps(0.0025) },
-    { ceiling: 2500000, rateBps: toBps(0.01) },
-    { ceiling: Number.POSITIVE_INFINITY, rateBps: toBps(0.015) },
-  ],
-}
+// TER Harian (PP 58/2023 Lampiran dan PMK 168/2023) tanpa kategori A/B/C:
+// penghasilan bruto harian s.d. Rp450.000 tidak dikenai pajak, Rp450.001–
+// Rp2.500.000 dikenai 0,5%, dan di atas Rp2.500.000 dikenai tarif Pasal 17
+// atas 50% penghasilan bruto harian (lihat hitungPph21Harian di utils.ts).
+export const TER_HARIAN_TABLE: Array<{ ceiling: number; rateBps: number }> = [
+  { ceiling: 450_000, rateBps: toBps(0) },
+  { ceiling: 2_500_000, rateBps: toBps(0.005) },
+]
 
-export const PPH22_RATES = {
+export const TER_HARIAN_PASAL17_THRESHOLD = 2_500_000
+
+export const PPH22_RATES: Record<string, number> = {
   impor: toBps(0.025),
   migas: toBps(0.02),
   bumn: toBps(0.015),
   lainnya: toBps(0.015),
 } as const
 
-export const PPH23_RATES = {
+export const PPH23_RATES: Record<string, number> = {
   jasaTeknik: toBps(0.02),
   jasaKonsultan: toBps(0.04),
   sewaAlat: toBps(0.02),
@@ -193,7 +183,7 @@ export const PPH23_RATES = {
   bunga: toBps(0.15),
 } as const
 
-export const PPH4_2_RATES = {
+export const PPH4_2_RATES: Record<string, number> = {
   sewaTanah: toBps(0.1),
   konstruksi: toBps(0.035),
   restoran: toBps(0.05),
@@ -201,13 +191,13 @@ export const PPH4_2_RATES = {
 } as const
 
 export const PPN_RATES_PER_YEAR: Record<string, number> = {
-  '2022': toBps(0.11),
-  '2023': toBps(0.11),
-  '2024': toBps(0.11),
-  '2025': toBps(0.12),
+  '2022': 0.11,
+  '2023': 0.11,
+  '2024': 0.11,
+  '2025': 0.12,
 }
 
-export const PPNBM_RATES = {
+export const PPNBM_RATES: Record<string, number> = {
   kendaraanMewah: toBps(0.2),
   perhiasan: toBps(0.3),
   kapalPesiar: toBps(0.75),

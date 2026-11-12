@@ -308,11 +308,11 @@ function calculatePegawaiTidakTetap(input: PPh21Input): TaxResult {
       rows.push({ label: 'Total masa', value: total, variant: 'total' })
         return { totalTax: total, breakdown: rows }
   }
-  i
+  
   if (input.brutoMonthly <= 2500000) {
     const terRateBps = getTerBulananRate(input.terCategory, input.brutoMonthly)
     const masaTax = applyRate(input.brutoMonthly, terRateBps)
-    return {
+    
       totalTax: masaTax * months,
       breakdown: [
         { label: 'Penghasilan', variant: 'section' },

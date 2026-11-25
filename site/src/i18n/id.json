@@ -26,7 +26,7 @@
   "handbook_alt": "Ilustrasi: buku panduan terbuka dengan halaman putih bergaris, penanda tab biru keabuan dan pita pembatas emas di atas permukaan biru tua.",
   "receipts_alt": "Ilustrasi: bukti cetak dengan klip kertas emas di atas cetakan spreadsheet, di samping laptop tertutup di meja terang.",
   "example_h": "Lihat ke mana setiap rupiah PPh 21 pergi",
-  "example_p": "PPh 21 adalah pajak penghasilan yang dipotong dari gaji. Tabel ini untuk satu pegawai tetap dengan skema Tarif Efektif (TER), dibayar dua belas masa tanpa bonus. Pilih gaji bruto bulanan dan status PTKP, penghasilan tidak kena pajak menurut status keluarga.",
+  "example_p": "PPh 21 adalah pajak penghasilan yang dipotong dari gaji. Tabel ini untuk satu pegawai tetap dengan skema Tarif Efektif Rata-rata (TER), dibayar dua belas masa tanpa bonus. Pilih gaji bruto bulanan dan status PTKP, penghasilan tidak kena pajak menurut status keluarga.",
   "label_gross": "Gaji bruto per bulan",
   "label_ptkp": "Status PTKP",
   "noscript": "Mengganti input butuh JavaScript. Ini kasus bawaan.",

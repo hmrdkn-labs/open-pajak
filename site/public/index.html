@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Open Pajak: Indonesian tax calculators that show every step</title>
-<meta name="description" content="Free, open-source calculators for Indonesian PPh 21, 22, 23, 26, 4(2), PPN and PPNBM. Every step is shown and your numbers stay in your browser.">
+<meta name="description" content="Free calculators for Indonesian PPh 21, 22, 23, 26, 4(2), PPN and PPNBM, with the code public on GitHub. Every step is shown and your numbers stay in your browser.">
 <meta name="theme-color" content="#0a2540">
 <link rel="canonical" href="https://open-pajak.hamardikan.com/">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -17,7 +17,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="/assets/fonts/plus-jakarta-sans-latin-800-normal.5f301a8e.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/public-sans-latin-400-normal.36274b57.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/style.4c565ad6.css">
+<link rel="stylesheet" href="/assets/style.d73ccd51.css">
 <script src="/assets/boot.07e9e867.js"></script>
 <script src="/assets/app.6c3dd961.js" defer></script>
 </head>
@@ -36,7 +36,7 @@
 <main id="main">
   <section class="hero" id="top">
     <h1>Indonesian tax, worked out line by line</h1>
-    <p>Free calculators for PPh 21, 22, 23, 26, 4(2), PPN and PPNBM. Every step is shown, and your numbers stay in your browser.</p>
+    <p>Check PPh 21, PPN and five more Indonesian taxes step by step. Your numbers never leave your browser.</p>
     <p><a class="btn gold" href="https://openpajak.hamardikan.com/">Open the calculator</a></p>
     <picture class="stage"><source type="image/avif" srcset="/assets/img/hero-640.4787376a.avif 640w, /assets/img/hero-1024.4bf4df80.avif 1024w, /assets/img/hero-1536.470b286c.avif 1536w" sizes="(min-width: 1280px) 1280px, 100vw"><source type="image/webp" srcset="/assets/img/hero-640.a0d8b9cb.webp 640w, /assets/img/hero-1024.7e792eb7.webp 1024w, /assets/img/hero-1536.28fb6a5a.webp 1536w" sizes="(min-width: 1280px) 1280px, 100vw"><img src="/assets/img/hero-1536.28fb6a5a.webp" width="1536" height="864" alt="Illustration: a fanned stack of blank tax forms with a calculator, a gold paper clip and a loose slip on a navy desk." fetchpriority="high"></picture>
   </section>
@@ -64,13 +64,13 @@
             </select>
           </label>
         </div>
-        <noscript><p class="muted">Switching the inputs needs JavaScript. This is the default case.</p></noscript>
+        <noscript><p class="prose">Switching the inputs needs JavaScript. This is the default case.</p></noscript>
         <dl class="figures" aria-live="polite" id="figures">
           <div class="lead"><dt>Withheld each month, January to November</dt><dd>Rp 900,000</dd></div>
           <div><dt>December adjustment</dt><dd>Rp 1,425,000</dd></div>
           <div><dt>PPh 21 for the year</dt><dd>Rp 11,325,000</dd></div>
         </dl>
-        <p class="muted">Sample inputs, not a real payslip. PKP is taxable income after PTKP. The ledger is produced by <a href="https://github.com/hmrdkn-labs/open-pajak/blob/master/open-pajak-v1/src/lib/tax/pph21.ts"><code>pph21.ts</code></a>, the rule file the calculator runs.</p>
+        <p class="prose">Sample inputs, not a real payslip. PKP is taxable income after PTKP. The ledger is produced by <a href="https://github.com/hmrdkn-labs/open-pajak/blob/master/open-pajak-v1/src/lib/tax/pph21.ts"><code>pph21.ts</code></a>, the rule file the calculator runs.</p>
       </div>
       <div class="sheet" id="sheet" data-src="/assets/scenarios.e9b9a30c.json">
         <table class="ledger">
@@ -122,7 +122,7 @@
     <div class="text">
       <h2 id="rules-h">Rules that come from DJP’s own book</h2>
       <p>The PPh 21 and PPh 26 calculators cite Buku PPh 21/26, the guide from the Directorate General of Taxes (DJP) released on 8 January 2024. Each result comes with a step-by-step table and a formula narrative, so you can follow the rule instead of trusting a total.</p>
-      <p>The rule files sit in the repository next to the calculators, one per tax, written as plain functions.</p>
+      <p>The rule files sit in the repository next to the calculators, one per tax, written as plain functions. The app ships the guide too: <a href="https://openpajak.hamardikan.com/Buku_PPh2126_Release_20240108.pdf">Buku PPh 21/26, release 8 January 2024 (PDF)</a>.</p>
     </div>
     <picture class="art"><source type="image/avif" srcset="/assets/img/handbook-640.a5511bf2.avif 640w, /assets/img/handbook-1024.6d44c5bb.avif 1024w" sizes="(min-width: 900px) 50vw, 100vw"><source type="image/webp" srcset="/assets/img/handbook-640.6caee147.webp 640w, /assets/img/handbook-1024.22729bb8.webp 1024w" sizes="(min-width: 900px) 50vw, 100vw"><img src="/assets/img/handbook-1024.22729bb8.webp" width="1024" height="683" alt="Illustration: an open reference handbook with ruled white pages, blue-grey index tabs and a gold ribbon bookmark on a navy surface." loading="lazy" decoding="async"></picture>
   </section>
@@ -164,7 +164,7 @@
       <a href="https://github.com/hmrdkn-labs/open-pajak">Repository</a>
       <a href="https://hamardikan.com">hamardikan.com</a>
     </p>
-    <p class="muted">Deployed from <code>a0f45cf</code> on 25 November 2026. GitHub counts as of 25 November 2026.</p>
+    <p class="muted">Deployed from <code>c55f423</code> on 25 November 2026. GitHub counts as of 25 November 2026.</p>
   </div>
 </footer>
 </body>

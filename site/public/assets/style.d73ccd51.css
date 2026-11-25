@@ -37,7 +37,7 @@ p { margin: 0 0 1rem; max-width: 65ch; }
 a { color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
 code { font: inherit; font-weight: 600; }
 img { max-width: 100%; }
-.muted { color: var(--muted); font-size: var(--text-sm); }
+.prose { color: var(--muted); }
 
 :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 .top :focus-visible, .hero :focus-visible, .close :focus-visible, .foot :focus-visible { outline-color: var(--accent); }
@@ -86,8 +86,8 @@ section { padding-block: clamp(4rem, 9vw, 8rem); }
   background: var(--ink);
   animation: rise 700ms var(--ease) backwards;
 }
-.stage img { display: block; width: 100%; height: auto; aspect-ratio: 2 / 1; object-fit: cover; object-position: center top; mix-blend-mode: lighten; }
-@media (max-width: 899px) { .stage img { aspect-ratio: 16 / 9; } }
+.stage img { display: block; width: 100%; height: auto; aspect-ratio: 3.2 / 1; object-fit: cover; object-position: center 35%; mix-blend-mode: lighten; }
+@media (max-width: 899px) { .stage img { aspect-ratio: 16 / 6; } }
 @keyframes rise { from { opacity: 0; transform: translateY(24px); } }
 
 .btn {
@@ -177,7 +177,7 @@ select:disabled { opacity: 0.6; }
 .foot .brand { font: 800 var(--text-body) / 1.3 var(--display); letter-spacing: -0.02em; color: var(--bg); }
 .foot a { margin-left: 1.5rem; font-weight: 600; font-size: var(--text-sm); }
 .foot a:first-child { margin-left: 0; }
-.foot .muted { grid-column: 1 / -1; color: var(--on-ink-muted); }
+.foot .muted { grid-column: 1 / -1; color: var(--on-ink-muted); font-size: var(--text-sm); }
 
 /* ---- 404 ---- */
 .plain .lost { max-width: 40rem; margin: 0 auto; padding: 6rem var(--pad); }

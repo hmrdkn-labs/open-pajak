@@ -1,5 +1,6 @@
 // Audit for the built landing page. One Chromium at a time.
-// Usage: NODE_PATH=~/.cache/open-pajak-pw/node_modules node site/scripts/audit.cjs <base-url> <shots-dir>
+// Usage: NODE_PATH=~/.cache/open-pajak-pw/node_modules node site/scripts/audit.cjs <page-url> <shots-dir>
+// <page-url> is one page, e.g. http://127.0.0.1:8787/ or http://127.0.0.1:8787/en/. Run it once per page.
 // Exits non-zero on any failure; writes <shots-dir>/audit.json.
 const fs = require("fs");
 const path = require("path");
@@ -98,7 +99,7 @@ function freePort() {
 }
 
 async function lighthouse() {
-  const out = { performance: null, accessibility: null };
+  const out = {};
   let lhDir;
   try {
     lhDir = path.join(path.dirname(require.resolve("lighthouse/package.json")));
@@ -122,10 +123,13 @@ async function lighthouse() {
     if (!up) return { skipped: "Chromium did not expose a debugging port" };
     const mod = await import(pathToFileURL(path.join(lhDir, "core", "index.js")).href).catch(() => import("lighthouse"));
     const lh = mod.default || mod;
-    const run = await lh(base, { port, output: "json", logLevel: "error", onlyCategories: ["performance", "accessibility"] });
+    const run = await lh(base, { port, output: "json", logLevel: "error", onlyCategories: ["performance", "accessibility", "best-practices", "seo"] });
     const c = run.lhr.categories;
     out.performance = Math.round(c.performance.score * 100);
     out.accessibility = Math.round(c.accessibility.score * 100);
+    out.bestPractices = Math.round(c["best-practices"].score * 100);
+    out.seo = Math.round(c.seo.score * 100);
+    out.failed = Object.values(run.lhr.audits).filter((a) => a.score === 0 && ["best-practices", "seo"].some((cat) => c[cat].auditRefs.some((r) => r.id === a.id))).map((a) => a.id);
     out.failedA11y = Object.values(run.lhr.audits).filter((a) => a.score === 0 && c.accessibility.auditRefs.some((r) => r.id === a.id)).map((a) => a.id);
     return out;
   } catch (e) {
@@ -185,6 +189,62 @@ async function lighthouse() {
       await ctx.close();
     }
     check("7 axe", { violations: res }, f);
+  }
+
+  // 12: search tags (head, hreflang, Open Graph, JSON-LD) and CSP console errors
+  {
+    const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const page = await ctx.newPage();
+    const errors = [];
+    page.on("console", (m) => { if (m.type() === "error") errors.push(m.text().slice(0, 160)); });
+    page.on("pageerror", (e) => errors.push(String(e).slice(0, 160)));
+    await page.goto(base);
+    await page.waitForLoadState("networkidle");
+    const d = await page.evaluate(() => {
+      const meta = (sel) => (document.querySelector(sel) || {}).content || null;
+      const link = (sel) => (document.querySelector(sel) || {}).href || null;
+      const ld = [...document.querySelectorAll('script[type="application/ld+json"]')].map((n) => { try { return JSON.parse(n.textContent); } catch (e) { return { error: String(e) }; } });
+      return {
+        lang: document.documentElement.lang,
+        h1s: document.querySelectorAll("h1").length,
+        title: document.title,
+        description: meta('meta[name="description"]'),
+        canonical: (document.querySelector('link[rel="canonical"]') || {}).getAttribute && document.querySelector('link[rel="canonical"]').getAttribute("href"),
+        hreflang: [...document.querySelectorAll('link[rel="alternate"][hreflang]')].map((l) => [l.getAttribute("hreflang"), l.getAttribute("href")]),
+        og: Object.fromEntries([...document.querySelectorAll('meta[property^="og:"], meta[name="twitter:card"]')].map((m) => [m.getAttribute("property") || m.getAttribute("name"), m.content])),
+        ld,
+      };
+    });
+    const f = [];
+    const origin = "https://open-pajak.hamardikan.com";
+    const isId = new URL(base).pathname === "/";
+    const want = isId ? { lang: "id", url: `${origin}/`, locale: "id_ID", alt: "en_GB", img: `${origin}/og-id.png`, inLang: "id" } : { lang: "en", url: `${origin}/en/`, locale: "en_GB", alt: "id_ID", img: `${origin}/og.png`, inLang: "en" };
+    if (d.lang !== want.lang) f.push(`html lang ${d.lang}`);
+    if (d.h1s !== 1) f.push(`${d.h1s} h1`);
+    if (d.title.length > 60 || !/\| Open Pajak$/.test(d.title)) f.push(`title ${d.title.length} chars: ${d.title}`);
+    if (!d.description || d.description.length < 120 || d.description.length > 155) f.push(`description ${d.description && d.description.length} chars`);
+    if (d.canonical !== want.url) f.push(`canonical ${d.canonical}`);
+    const hl = Object.fromEntries(d.hreflang);
+    if (hl.id !== `${origin}/` || hl.en !== `${origin}/en/` || hl["x-default"] !== `${origin}/en/`) f.push(`hreflang ${JSON.stringify(hl)}`);
+    for (const k of ["og:title", "og:description", "og:url", "og:type", "og:site_name", "og:image", "og:image:width", "og:image:height", "og:image:alt", "og:locale", "og:locale:alternate", "twitter:card"]) if (!d.og[k]) f.push(`missing ${k}`);
+    if (d.og["og:url"] !== want.url) f.push(`og:url ${d.og["og:url"]}`);
+    if (d.og["og:image"] !== want.img) f.push(`og:image ${d.og["og:image"]}`);
+    if (d.og["og:locale"] !== want.locale || d.og["og:locale:alternate"] !== want.alt) f.push("og:locale pair");
+    if (d.og["twitter:card"] !== "summary_large_image") f.push("twitter:card");
+    const g = d.ld[0] && d.ld[0]["@graph"];
+    if (d.ld.length !== 1 || !g) f.push(`JSON-LD: ${d.ld.length} blocks, graph ${!!g}`);
+    else {
+      const types = g.map((n) => n["@type"]);
+      for (const t of ["WebSite", "WebApplication", "Person"]) if (!types.includes(t)) f.push(`JSON-LD missing ${t}`);
+      if (types.length !== 3) f.push(`JSON-LD types ${types}`);
+      const web = g.find((n) => n["@type"] === "WebSite"), app = g.find((n) => n["@type"] === "WebApplication");
+      if (web && (web.url !== want.url || web.inLanguage !== want.inLang)) f.push("WebSite url/inLanguage");
+      if (app && !(app.name === "Open Pajak" && app.url === "https://openpajak.hamardikan.com/" && app.applicationCategory === "FinanceApplication" && app.operatingSystem === "Any (web browser)" && app.browserRequirements && app.description && app.sameAs && app.sameAs.length && app.author && app.publisher)) f.push("WebApplication properties");
+      for (const bad of ["offers", "aggregateRating", "review", "softwareVersion", "downloadUrl"]) if (app && bad in app) f.push(`WebApplication has ${bad}`);
+    }
+    if (errors.length) f.push(`console errors: ${errors.join(" | ")}`);
+    check("12 seo", { title: d.title, titleLength: d.title.length, descriptionLength: d.description && d.description.length, description: d.description, hreflang: hl, jsonld: g && g.map((n) => n["@type"]), consoleErrors: errors }, f);
+    await ctx.close();
   }
 
   // 8: JS off
@@ -265,8 +325,10 @@ async function lighthouse() {
       console.log("SKIP 10 lighthouse:", lh.skipped);
     } else {
       const f = [];
-      if (lh.performance < 90) f.push(`performance ${lh.performance} < 90`);
+      if (lh.performance < 95) f.push(`performance ${lh.performance} < 95`);
       if (lh.accessibility < 100) f.push(`accessibility ${lh.accessibility} < 100 (${(lh.failedA11y || []).join(", ")})`);
+      if (lh.bestPractices < 100) f.push(`best practices ${lh.bestPractices} < 100 (${lh.failed.join(", ")})`);
+      if (lh.seo < 100) f.push(`seo ${lh.seo} < 100 (${lh.failed.join(", ")})`);
       check("10 lighthouse", lh, f);
     }
   }

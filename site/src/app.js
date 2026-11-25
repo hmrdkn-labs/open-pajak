@@ -32,7 +32,7 @@
       figures.innerHTML = s.figures;
       caption.textContent = s.caption;
     }).catch(function () {
-      caption.textContent = "The other cases could not be loaded. Reload the page to try again.";
+      caption.textContent = sheet.getAttribute("data-error");
       pending = null;
     });
   }

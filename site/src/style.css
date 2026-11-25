@@ -65,9 +65,8 @@ section { padding-block: clamp(4rem, 9vw, 8rem); }
 
 /* ---- hero: wall-to-wall display type, wide stage dipping into the page ---- */
 .hero {
-  --bleed: clamp(56px, 12vw, 190px);
   padding: clamp(7rem, 13vw, 9.5rem) var(--pad) 0;
-  background: linear-gradient(var(--ink) 0 calc(100% - var(--bleed)), var(--surface) 0);
+  background: var(--ink);
   color: var(--bg);
   text-align: center;
 }
@@ -83,12 +82,12 @@ section { padding-block: clamp(4rem, 9vw, 8rem); }
 .hero h1 + p { margin-top: clamp(1.5rem, 3vw, 2.25rem); }
 .stage {
   display: block; isolation: isolate;
-  width: 100%; max-width: var(--max);
-  margin: clamp(2rem, 4vw, 3.5rem) auto 0;
+  width: calc(100% + 2 * var(--pad)); margin: clamp(2rem, 4vw, 3.5rem) calc(-1 * var(--pad)) 0;
   background: var(--ink);
   animation: rise 700ms var(--ease) backwards;
 }
-.stage img { display: block; width: 100%; height: auto; mix-blend-mode: lighten; }
+.stage img { display: block; width: 100%; height: auto; aspect-ratio: 2 / 1; object-fit: cover; object-position: center top; mix-blend-mode: lighten; }
+@media (max-width: 899px) { .stage img { aspect-ratio: 16 / 9; } }
 @keyframes rise { from { opacity: 0; transform: translateY(24px); } }
 
 .btn {
@@ -129,7 +128,7 @@ select:disabled { opacity: 0.6; }
 .ledger caption { caption-side: top; text-align: left; padding-bottom: 0.75rem; font-size: var(--text-sm); color: var(--muted); }
 .ledger thead th { padding: 0.4rem 0; font-size: var(--text-sm); font-weight: 600; color: var(--muted); text-align: left; border-bottom: 2px solid var(--ink); }
 .ledger th, .ledger td { padding: 0.5rem 0; border-bottom: 1px solid var(--rule); vertical-align: baseline; }
-.ledger tbody th { font-weight: 400; text-align: left; padding-right: 1rem; }
+.ledger tbody th { font-weight: 400; text-align: left; padding-right: 0.75rem; overflow-wrap: anywhere; }
 .ledger .num { text-align: right; white-space: nowrap; font-weight: 600; }
 .ledger .note { display: block; font-size: var(--text-sm); color: var(--muted); }
 .ledger .group th { padding-top: 1.5rem; font: 700 var(--text-body) / 1.3 var(--display); border-bottom: 1px solid var(--ink); }
@@ -147,8 +146,8 @@ select:disabled { opacity: 0.6; }
   transition: background-color 160ms var(--ease);
 }
 .routes a:hover { background: var(--surface); }
-.routes .name { font: 700 var(--text-heading) / 1.1 var(--display); letter-spacing: -0.03em; }
-.routes a:hover .name { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.15em; }
+.routes .name { font: 700 var(--text-heading) / 1.1 var(--display); letter-spacing: -0.03em; text-decoration: underline; text-decoration-color: var(--ink); text-decoration-thickness: 3px; text-underline-offset: 0.12em; }
+.routes a:hover .name { text-decoration-color: var(--accent); }
 .routes .path { color: var(--muted); font-size: var(--text-sm); font-weight: 600; text-align: right; }
 
 /* ---- image splits bleed to the viewport edge ---- */
@@ -175,14 +174,14 @@ select:disabled { opacity: 0.6; }
 .foot { background: var(--ink); color: var(--on-ink-muted); padding-block: 2.5rem; border-top: 1px solid rgba(244, 247, 250, 0.2); }
 .foot .wrap { display: grid; grid-template-columns: 1fr auto; gap: 0.5rem 2rem; align-items: baseline; }
 .foot p { margin: 0; max-width: none; }
-.foot .brand { font: 800 1.625rem / 1 var(--display); letter-spacing: -0.03em; color: var(--bg); }
+.foot .brand { font: 800 var(--text-body) / 1.3 var(--display); letter-spacing: -0.02em; color: var(--bg); }
 .foot a { margin-left: 1.5rem; font-weight: 600; font-size: var(--text-sm); }
 .foot a:first-child { margin-left: 0; }
 .foot .muted { grid-column: 1 / -1; color: var(--on-ink-muted); }
 
 /* ---- 404 ---- */
 .plain .lost { max-width: 40rem; margin: 0 auto; padding: 6rem var(--pad); }
-.plain .brand { font: 800 1.625rem / 1 var(--display); letter-spacing: -0.03em; }
+.plain .brand { font: 800 var(--text-body) / 1.3 var(--display); letter-spacing: -0.03em; }
 .plain .brand a { text-decoration: none; }
 .plain h1 { font-weight: 800; font-size: var(--text-heading); line-height: 1.05; letter-spacing: -0.03em; margin-block: 3rem 1.25rem; }
 
@@ -203,6 +202,7 @@ select:disabled { opacity: 0.6; }
 @media (max-width: 420px) {
   .top .brand { font-size: 1.25rem; }
   .top nav a { padding-inline: 0.45rem; }
+  .top nav a[href="#calculators"] { display: none; }
   .sheet { padding: 0.75rem; }
 }
 

@@ -22,8 +22,8 @@ body{width:1200px;height:630px;background:#0a2540;color:#f4f7fa;position:relativ
 img.h{position:absolute;left:350px;top:350px;width:900px;mix-blend-mode:lighten}
 .t{position:absolute;left:64px;right:64px;top:54px}
 h1{font:800 86px/0.98 J;letter-spacing:-.04em;word-spacing:.1em}
-.b{position:absolute;left:64px;bottom:40px;display:flex;align-items:center;gap:16px;font:800 38px/1 J;letter-spacing:-.03em}
-.m{width:52px;height:52px;display:block}
+.b{position:absolute;left:64px;bottom:34px;display:flex;align-items:center;gap:18px;font:800 38px/1 J;letter-spacing:-.03em}
+.m{width:64px;height:64px;display:block;border-radius:22.9167%;box-shadow:0 0 0 1px rgba(255,255,255,.18)}
 </style><img class="h" src="${hero}"><div class="t"><h1>${h1}</h1></div><div class="b">${logo}<span>Open Pajak</span></div>`;
 
 const h1 = (l) => JSON.parse(readFileSync(join(root, `src/i18n/${l}.json`), "utf8")).h1;

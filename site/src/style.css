@@ -58,8 +58,10 @@ section { padding-block: clamp(4rem, 9vw, 8rem); }
   padding: 1rem var(--pad);
   color: var(--bg);
 }
-.top .brand { display: inline-flex; align-items: center; gap: 0.45em; font: 800 1.625rem / 1 var(--display); letter-spacing: -0.03em; text-decoration: none; padding: 0.5rem 0; white-space: nowrap; }
-.logo { display: block; flex: none; width: 1.3em; height: 1.3em; }
+.top .brand { display: inline-flex; align-items: center; gap: 0.55rem; font: 800 1.625rem / 1 var(--display); letter-spacing: -0.03em; text-decoration: none; padding: 0.5rem 0; white-space: nowrap; }
+/* The mark keeps its own colours; the ring sits outside it so the navy square reads on the navy header. */
+.logo { display: block; flex: none; width: 44px; height: 44px; border-radius: 22.9167%; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18); }
+@media (max-width: 640px) { .logo { width: 40px; height: 40px; } }
 .top nav { display: flex; gap: 0.25rem; }
 .top nav a { padding: 0.75rem 0.7rem; font-size: var(--text-sm); font-weight: 600; text-decoration: none; color: var(--on-ink-muted); transition: color 160ms var(--ease); }
 .top nav a:hover { color: #fff; text-decoration: underline; }
@@ -205,6 +207,11 @@ select:disabled { opacity: 0.6; }
 /* The language link stays; section links drop out as the bar runs out of room. */
 @media (max-width: 640px) {
   .top nav a[href="#calculators"], .top nav a[href="#source"] { display: none; }
+}
+@media (max-width: 360px) {
+  .top { gap: 0.5rem; padding-inline: 1rem; }
+  .top .brand { font-size: 1.125rem; gap: 0.45rem; }
+  .top nav a.lang { font-size: 0.8125rem; padding-inline: 0.25rem; }
 }
 @media (max-width: 420px) {
   .top .brand { font-size: 1.25rem; }

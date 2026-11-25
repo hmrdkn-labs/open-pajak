@@ -1,0 +1,2381 @@
+{
+  "source": "open-pajak-v1/src/lib/tax/pph21.ts",
+  "locale": "en",
+  "scenarios": [
+    {
+      "id": "5000000-TK/0",
+      "gross": 5000000,
+      "ptkp": "TK/0",
+      "input": {
+        "subjectType": "pegawai_tetap",
+        "brutoMonthly": 5000000,
+        "monthsPaid": 12,
+        "pensionContribution": 0,
+        "zakatOrDonation": 0,
+        "ptkpStatus": "TK/0",
+        "scheme": "ter",
+        "terCategory": "A",
+        "bonusAnnual": 0,
+        "foreignTaxRate": 20,
+        "isDailyWorker": false
+      },
+      "monthlyTer": 0,
+      "decemberAdjustment": 150000,
+      "totalTaxYear": 150000,
+      "rows": [
+        {
+          "label": "A. Gross income",
+          "variant": "group"
+        },
+        {
+          "label": "Base salary (annual)",
+          "value": 60000000,
+          "note": "Approx. 12 periods"
+        },
+        {
+          "label": "Allowances/bonus (annual)",
+          "value": 0,
+          "note": "Fixed/variable allowances & bonus"
+        },
+        {
+          "label": "Total gross income",
+          "value": 60000000,
+          "variant": "subtotal",
+          "note": "Total gross income"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "B. Deductions",
+          "variant": "group"
+        },
+        {
+          "label": "Job-related deduction",
+          "value": -3000000,
+          "note": "5% of gross, max 6M/year"
+        },
+        {
+          "label": "Pension/JHT contribution",
+          "value": 0,
+          "note": "Employee-paid portion"
+        },
+        {
+          "label": "Total deductions",
+          "value": -3000000,
+          "variant": "subtotal"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "C. Tax base",
+          "variant": "group"
+        },
+        {
+          "label": "Net income",
+          "value": 57000000,
+          "note": "Gross − deductions"
+        },
+        {
+          "label": "PTKP",
+          "value": -54000000,
+          "note": "Based on family status"
+        },
+        {
+          "label": "Rounded PKP",
+          "value": 3000000,
+          "variant": "subtotal"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "D. Tax due (Pasal 17)",
+          "variant": "group"
+        },
+        {
+          "label": "Tier 1: 5% × 3.000.000",
+          "value": 150000,
+          "note": "Lapisan PKP 0 – 3.000.000"
+        },
+        {
+          "label": "Total annual PPh 21",
+          "value": 150000,
+          "variant": "subtotal",
+          "note": "Full-year liability"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "E. Settlement status",
+          "variant": "group"
+        },
+        {
+          "id": "ter_per_period",
+          "label": "PPh 21 TER per period",
+          "value": 0,
+          "note": "0% × gross per period"
+        },
+        {
+          "label": "(-) TER withheld Jan–Nov",
+          "value": 0,
+          "note": "0% × 11 periods"
+        },
+        {
+          "id": "december_adjustment",
+          "label": "December adjustment (underpaid)",
+          "value": 150000,
+          "variant": "total",
+          "note": "Remaining liability in December"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "F. Take-home pay",
+          "variant": "group"
+        },
+        {
+          "id": "take_home_annual",
+          "label": "Annual take-home",
+          "value": 59850000,
+          "note": "Gross − tax"
+        },
+        {
+          "id": "take_home_period",
+          "label": "Take-home per period",
+          "value": 4987500,
+          "note": "12 periods"
+        }
+      ]
+    },
+    {
+      "id": "5000000-K/0",
+      "gross": 5000000,
+      "ptkp": "K/0",
+      "input": {
+        "subjectType": "pegawai_tetap",
+        "brutoMonthly": 5000000,
+        "monthsPaid": 12,
+        "pensionContribution": 0,
+        "zakatOrDonation": 0,
+        "ptkpStatus": "K/0",
+        "scheme": "ter",
+        "terCategory": "A",
+        "bonusAnnual": 0,
+        "foreignTaxRate": 20,
+        "isDailyWorker": false
+      },
+      "monthlyTer": 0,
+      "decemberAdjustment": 0,
+      "totalTaxYear": 0,
+      "rows": [
+        {
+          "label": "A. Gross income",
+          "variant": "group"
+        },
+        {
+          "label": "Base salary (annual)",
+          "value": 60000000,
+          "note": "Approx. 12 periods"
+        },
+        {
+          "label": "Allowances/bonus (annual)",
+          "value": 0,
+          "note": "Fixed/variable allowances & bonus"
+        },
+        {
+          "label": "Total gross income",
+          "value": 60000000,
+          "variant": "subtotal",
+          "note": "Total gross income"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "B. Deductions",
+          "variant": "group"
+        },
+        {
+          "label": "Job-related deduction",
+          "value": -3000000,
+          "note": "5% of gross, max 6M/year"
+        },
+        {
+          "label": "Pension/JHT contribution",
+          "value": 0,
+          "note": "Employee-paid portion"
+        },
+        {
+          "label": "Total deductions",
+          "value": -3000000,
+          "variant": "subtotal"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "C. Tax base",
+          "variant": "group"
+        },
+        {
+          "label": "Net income",
+          "value": 57000000,
+          "note": "Gross − deductions"
+        },
+        {
+          "label": "PTKP",
+          "value": -58500000,
+          "note": "Based on family status"
+        },
+        {
+          "label": "Rounded PKP",
+          "value": 0,
+          "variant": "subtotal"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "D. Tax due (Pasal 17)",
+          "variant": "group"
+        },
+        {
+          "label": "Total annual PPh 21",
+          "value": 0,
+          "variant": "subtotal",
+          "note": "Full-year liability"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "E. Settlement status",
+          "variant": "group"
+        },
+        {
+          "id": "ter_per_period",
+          "label": "PPh 21 TER per period",
+          "value": 0,
+          "note": "0% × gross per period"
+        },
+        {
+          "label": "(-) TER withheld Jan–Nov",
+          "value": 0,
+          "note": "0% × 11 periods"
+        },
+        {
+          "id": "december_adjustment",
+          "label": "December adjustment (underpaid)",
+          "value": 0,
+          "variant": "total",
+          "note": "Remaining liability in December"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "F. Take-home pay",
+          "variant": "group"
+        },
+        {
+          "id": "take_home_annual",
+          "label": "Annual take-home",
+          "value": 60000000,
+          "note": "Gross − tax"
+        },
+        {
+          "id": "take_home_period",
+          "label": "Take-home per period",
+          "value": 5000000,
+          "note": "12 periods"
+        }
+      ]
+    },
+    {
+      "id": "5000000-K/2",
+      "gross": 5000000,
+      "ptkp": "K/2",
+      "input": {
+        "subjectType": "pegawai_tetap",
+        "brutoMonthly": 5000000,
+        "monthsPaid": 12,
+        "pensionContribution": 0,
+        "zakatOrDonation": 0,
+        "ptkpStatus": "K/2",
+        "scheme": "ter",
+        "terCategory": "B",
+        "bonusAnnual": 0,
+        "foreignTaxRate": 20,
+        "isDailyWorker": false
+      },
+      "monthlyTer": 0,
+      "decemberAdjustment": 0,
+      "totalTaxYear": 0,
+      "rows": [
+        {
+          "label": "A. Gross income",
+          "variant": "group"
+        },
+        {
+          "label": "Base salary (annual)",
+          "value": 60000000,
+          "note": "Approx. 12 periods"
+        },
+        {
+          "label": "Allowances/bonus (annual)",
+          "value": 0,
+          "note": "Fixed/variable allowances & bonus"
+        },
+        {
+          "label": "Total gross income",
+          "value": 60000000,
+          "variant": "subtotal",
+          "note": "Total gross income"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "B. Deductions",
+          "variant": "group"
+        },
+        {
+          "label": "Job-related deduction",
+          "value": -3000000,
+          "note": "5% of gross, max 6M/year"
+        },
+        {
+          "label": "Pension/JHT contribution",
+          "value": 0,
+          "note": "Employee-paid portion"
+        },
+        {
+          "label": "Total deductions",
+          "value": -3000000,
+          "variant": "subtotal"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "C. Tax base",
+          "variant": "group"
+        },
+        {
+          "label": "Net income",
+          "value": 57000000,
+          "note": "Gross − deductions"
+        },
+        {
+          "label": "PTKP",
+          "value": -67500000,
+          "note": "Based on family status"
+        },
+        {
+          "label": "Rounded PKP",
+          "value": 0,
+          "variant": "subtotal"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "D. Tax due (Pasal 17)",
+          "variant": "group"
+        },
+        {
+          "label": "Total annual PPh 21",
+          "value": 0,
+          "variant": "subtotal",
+          "note": "Full-year liability"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "E. Settlement status",
+          "variant": "group"
+        },
+        {
+          "id": "ter_per_period",
+          "label": "PPh 21 TER per period",
+          "value": 0,
+          "note": "0% × gross per period"
+        },
+        {
+          "label": "(-) TER withheld Jan–Nov",
+          "value": 0,
+          "note": "0% × 11 periods"
+        },
+        {
+          "id": "december_adjustment",
+          "label": "December adjustment (underpaid)",
+          "value": 0,
+          "variant": "total",
+          "note": "Remaining liability in December"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "F. Take-home pay",
+          "variant": "group"
+        },
+        {
+          "id": "take_home_annual",
+          "label": "Annual take-home",
+          "value": 60000000,
+          "note": "Gross − tax"
+        },
+        {
+          "id": "take_home_period",
+          "label": "Take-home per period",
+          "value": 5000000,
+          "note": "12 periods"
+        }
+      ]
+    },
+    {
+      "id": "10000000-TK/0",
+      "gross": 10000000,
+      "ptkp": "TK/0",
+      "input": {
+        "subjectType": "pegawai_tetap",
+        "brutoMonthly": 10000000,
+        "monthsPaid": 12,
+        "pensionContribution": 0,
+        "zakatOrDonation": 0,
+        "ptkpStatus": "TK/0",
+        "scheme": "ter",
+        "terCategory": "A",
+        "bonusAnnual": 0,
+        "foreignTaxRate": 20,
+        "isDailyWorker": false
+      },
+      "monthlyTer": 200000,
+      "decemberAdjustment": 800000,
+      "totalTaxYear": 3000000,
+      "rows": [
+        {
+          "label": "A. Gross income",
+          "variant": "group"
+        },
+        {
+          "label": "Base salary (annual)",
+          "value": 120000000,
+          "note": "Approx. 12 periods"
+        },
+        {
+          "label": "Allowances/bonus (annual)",
+          "value": 0,
+          "note": "Fixed/variable allowances & bonus"
+        },
+        {
+          "label": "Total gross income",
+          "value": 120000000,
+          "variant": "subtotal",
+          "note": "Total gross income"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "B. Deductions",
+          "variant": "group"
+        },
+        {
+          "label": "Job-related deduction",
+          "value": -6000000,
+          "note": "5% of gross, max 6M/year"
+        },
+        {
+          "label": "Pension/JHT contribution",
+          "value": 0,
+          "note": "Employee-paid portion"
+        },
+        {
+          "label": "Total deductions",
+          "value": -6000000,
+          "variant": "subtotal"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "C. Tax base",
+          "variant": "group"
+        },
+        {
+          "label": "Net income",
+          "value": 114000000,
+          "note": "Gross − deductions"
+        },
+        {
+          "label": "PTKP",
+          "value": -54000000,
+          "note": "Based on family status"
+        },
+        {
+          "label": "Rounded PKP",
+          "value": 60000000,
+          "variant": "subtotal"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "D. Tax due (Pasal 17)",
+          "variant": "group"
+        },
+        {
+          "label": "Tier 1: 5% × 60.000.000",
+          "value": 3000000,
+          "note": "Lapisan PKP 0 – 60.000.000"
+        },
+        {
+          "label": "Total annual PPh 21",
+          "value": 3000000,
+          "variant": "subtotal",
+          "note": "Full-year liability"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "E. Settlement status",
+          "variant": "group"
+        },
+        {
+          "id": "ter_per_period",
+          "label": "PPh 21 TER per period",
+          "value": 200000,
+          "note": "2% × gross per period"
+        },
+        {
+          "label": "(-) TER withheld Jan–Nov",
+          "value": -2200000,
+          "note": "2% × 11 periods"
+        },
+        {
+          "id": "december_adjustment",
+          "label": "December adjustment (underpaid)",
+          "value": 800000,
+          "variant": "total",
+          "note": "Remaining liability in December"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "F. Take-home pay",
+          "variant": "group"
+        },
+        {
+          "id": "take_home_annual",
+          "label": "Annual take-home",
+          "value": 117000000,
+          "note": "Gross − tax"
+        },
+        {
+          "id": "take_home_period",
+          "label": "Take-home per period",
+          "value": 9750000,
+          "note": "12 periods"
+        }
+      ]
+    },
+    {
+      "id": "10000000-K/0",
+      "gross": 10000000,
+      "ptkp": "K/0",
+      "input": {
+        "subjectType": "pegawai_tetap",
+        "brutoMonthly": 10000000,
+        "monthsPaid": 12,
+        "pensionContribution": 0,
+        "zakatOrDonation": 0,
+        "ptkpStatus": "K/0",
+        "scheme": "ter",
+        "terCategory": "A",
+        "bonusAnnual": 0,
+        "foreignTaxRate": 20,
+        "isDailyWorker": false
+      },
+      "monthlyTer": 200000,
+      "decemberAdjustment": 575000,
+      "totalTaxYear": 2775000,
+      "rows": [
+        {
+          "label": "A. Gross income",
+          "variant": "group"
+        },
+        {
+          "label": "Base salary (annual)",
+          "value": 120000000,
+          "note": "Approx. 12 periods"
+        },
+        {
+          "label": "Allowances/bonus (annual)",
+          "value": 0,
+          "note": "Fixed/variable allowances & bonus"
+        },
+        {
+          "label": "Total gross income",
+          "value": 120000000,
+          "variant": "subtotal",
+          "note": "Total gross income"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "B. Deductions",
+          "variant": "group"
+        },
+        {
+          "label": "Job-related deduction",
+          "value": -6000000,
+          "note": "5% of gross, max 6M/year"
+        },
+        {
+          "label": "Pension/JHT contribution",
+          "value": 0,
+          "note": "Employee-paid portion"
+        },
+        {
+          "label": "Total deductions",
+          "value": -6000000,
+          "variant": "subtotal"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "C. Tax base",
+          "variant": "group"
+        },
+        {
+          "label": "Net income",
+          "value": 114000000,
+          "note": "Gross − deductions"
+        },
+        {
+          "label": "PTKP",
+          "value": -58500000,
+          "note": "Based on family status"
+        },
+        {
+          "label": "Rounded PKP",
+          "value": 55500000,
+          "variant": "subtotal"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "D. Tax due (Pasal 17)",
+          "variant": "group"
+        },
+        {
+          "label": "Tier 1: 5% × 55.500.000",
+          "value": 2775000,
+          "note": "Lapisan PKP 0 – 55.500.000"
+        },
+        {
+          "label": "Total annual PPh 21",
+          "value": 2775000,
+          "variant": "subtotal",
+          "note": "Full-year liability"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "E. Settlement status",
+          "variant": "group"
+        },
+        {
+          "id": "ter_per_period",
+          "label": "PPh 21 TER per period",
+          "value": 200000,
+          "note": "2% × gross per period"
+        },
+        {
+          "label": "(-) TER withheld Jan–Nov",
+          "value": -2200000,
+          "note": "2% × 11 periods"
+        },
+        {
+          "id": "december_adjustment",
+          "label": "December adjustment (underpaid)",
+          "value": 575000,
+          "variant": "total",
+          "note": "Remaining liability in December"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "F. Take-home pay",
+          "variant": "group"
+        },
+        {
+          "id": "take_home_annual",
+          "label": "Annual take-home",
+          "value": 117225000,
+          "note": "Gross − tax"
+        },
+        {
+          "id": "take_home_period",
+          "label": "Take-home per period",
+          "value": 9768750,
+          "note": "12 periods"
+        }
+      ]
+    },
+    {
+      "id": "10000000-K/2",
+      "gross": 10000000,
+      "ptkp": "K/2",
+      "input": {
+        "subjectType": "pegawai_tetap",
+        "brutoMonthly": 10000000,
+        "monthsPaid": 12,
+        "pensionContribution": 0,
+        "zakatOrDonation": 0,
+        "ptkpStatus": "K/2",
+        "scheme": "ter",
+        "terCategory": "B",
+        "bonusAnnual": 0,
+        "foreignTaxRate": 20,
+        "isDailyWorker": false
+      },
+      "monthlyTer": 150000,
+      "decemberAdjustment": 675000,
+      "totalTaxYear": 2325000,
+      "rows": [
+        {
+          "label": "A. Gross income",
+          "variant": "group"
+        },
+        {
+          "label": "Base salary (annual)",
+          "value": 120000000,
+          "note": "Approx. 12 periods"
+        },
+        {
+          "label": "Allowances/bonus (annual)",
+          "value": 0,
+          "note": "Fixed/variable allowances & bonus"
+        },
+        {
+          "label": "Total gross income",
+          "value": 120000000,
+          "variant": "subtotal",
+          "note": "Total gross income"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "B. Deductions",
+          "variant": "group"
+        },
+        {
+          "label": "Job-related deduction",
+          "value": -6000000,
+          "note": "5% of gross, max 6M/year"
+        },
+        {
+          "label": "Pension/JHT contribution",
+          "value": 0,
+          "note": "Employee-paid portion"
+        },
+        {
+          "label": "Total deductions",
+          "value": -6000000,
+          "variant": "subtotal"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "C. Tax base",
+          "variant": "group"
+        },
+        {
+          "label": "Net income",
+          "value": 114000000,
+          "note": "Gross − deductions"
+        },
+        {
+          "label": "PTKP",
+          "value": -67500000,
+          "note": "Based on family status"
+        },
+        {
+          "label": "Rounded PKP",
+          "value": 46500000,
+          "variant": "subtotal"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "D. Tax due (Pasal 17)",
+          "variant": "group"
+        },
+        {
+          "label": "Tier 1: 5% × 46.500.000",
+          "value": 2325000,
+          "note": "Lapisan PKP 0 – 46.500.000"
+        },
+        {
+          "label": "Total annual PPh 21",
+          "value": 2325000,
+          "variant": "subtotal",
+          "note": "Full-year liability"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "E. Settlement status",
+          "variant": "group"
+        },
+        {
+          "id": "ter_per_period",
+          "label": "PPh 21 TER per period",
+          "value": 150000,
+          "note": "1.50% × gross per period"
+        },
+        {
+          "label": "(-) TER withheld Jan–Nov",
+          "value": -1650000,
+          "note": "1.50% × 11 periods"
+        },
+        {
+          "id": "december_adjustment",
+          "label": "December adjustment (underpaid)",
+          "value": 675000,
+          "variant": "total",
+          "note": "Remaining liability in December"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "F. Take-home pay",
+          "variant": "group"
+        },
+        {
+          "id": "take_home_annual",
+          "label": "Annual take-home",
+          "value": 117675000,
+          "note": "Gross − tax"
+        },
+        {
+          "id": "take_home_period",
+          "label": "Take-home per period",
+          "value": 9806250,
+          "note": "12 periods"
+        }
+      ]
+    },
+    {
+      "id": "15000000-TK/0",
+      "gross": 15000000,
+      "ptkp": "TK/0",
+      "input": {
+        "subjectType": "pegawai_tetap",
+        "brutoMonthly": 15000000,
+        "monthsPaid": 12,
+        "pensionContribution": 0,
+        "zakatOrDonation": 0,
+        "ptkpStatus": "TK/0",
+        "scheme": "ter",
+        "terCategory": "A",
+        "bonusAnnual": 0,
+        "foreignTaxRate": 20,
+        "isDailyWorker": false
+      },
+      "monthlyTer": 900000,
+      "decemberAdjustment": 2100000,
+      "totalTaxYear": 12000000,
+      "rows": [
+        {
+          "label": "A. Gross income",
+          "variant": "group"
+        },
+        {
+          "label": "Base salary (annual)",
+          "value": 180000000,
+          "note": "Approx. 12 periods"
+        },
+        {
+          "label": "Allowances/bonus (annual)",
+          "value": 0,
+          "note": "Fixed/variable allowances & bonus"
+        },
+        {
+          "label": "Total gross income",
+          "value": 180000000,
+          "variant": "subtotal",
+          "note": "Total gross income"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "B. Deductions",
+          "variant": "group"
+        },
+        {
+          "label": "Job-related deduction",
+          "value": -6000000,
+          "note": "5% of gross, max 6M/year"
+        },
+        {
+          "label": "Pension/JHT contribution",
+          "value": 0,
+          "note": "Employee-paid portion"
+        },
+        {
+          "label": "Total deductions",
+          "value": -6000000,
+          "variant": "subtotal"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "C. Tax base",
+          "variant": "group"
+        },
+        {
+          "label": "Net income",
+          "value": 174000000,
+          "note": "Gross − deductions"
+        },
+        {
+          "label": "PTKP",
+          "value": -54000000,
+          "note": "Based on family status"
+        },
+        {
+          "label": "Rounded PKP",
+          "value": 120000000,
+          "variant": "subtotal"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "D. Tax due (Pasal 17)",
+          "variant": "group"
+        },
+        {
+          "label": "Tier 1: 5% × 60.000.000",
+          "value": 3000000,
+          "note": "Lapisan PKP 0 – 60.000.000"
+        },
+        {
+          "label": "Tier 2: 15% × 60.000.000",
+          "value": 9000000,
+          "note": "Lapisan PKP 60.000.000 – 120.000.000"
+        },
+        {
+          "label": "Total annual PPh 21",
+          "value": 12000000,
+          "variant": "subtotal",
+          "note": "Full-year liability"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "E. Settlement status",
+          "variant": "group"
+        },
+        {
+          "id": "ter_per_period",
+          "label": "PPh 21 TER per period",
+          "value": 900000,
+          "note": "6% × gross per period"
+        },
+        {
+          "label": "(-) TER withheld Jan–Nov",
+          "value": -9900000,
+          "note": "6% × 11 periods"
+        },
+        {
+          "id": "december_adjustment",
+          "label": "December adjustment (underpaid)",
+          "value": 2100000,
+          "variant": "total",
+          "note": "Remaining liability in December"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "F. Take-home pay",
+          "variant": "group"
+        },
+        {
+          "id": "take_home_annual",
+          "label": "Annual take-home",
+          "value": 168000000,
+          "note": "Gross − tax"
+        },
+        {
+          "id": "take_home_period",
+          "label": "Take-home per period",
+          "value": 14000000,
+          "note": "12 periods"
+        }
+      ]
+    },
+    {
+      "id": "15000000-K/0",
+      "gross": 15000000,
+      "ptkp": "K/0",
+      "input": {
+        "subjectType": "pegawai_tetap",
+        "brutoMonthly": 15000000,
+        "monthsPaid": 12,
+        "pensionContribution": 0,
+        "zakatOrDonation": 0,
+        "ptkpStatus": "K/0",
+        "scheme": "ter",
+        "terCategory": "A",
+        "bonusAnnual": 0,
+        "foreignTaxRate": 20,
+        "isDailyWorker": false
+      },
+      "monthlyTer": 900000,
+      "decemberAdjustment": 1425000,
+      "totalTaxYear": 11325000,
+      "rows": [
+        {
+          "label": "A. Gross income",
+          "variant": "group"
+        },
+        {
+          "label": "Base salary (annual)",
+          "value": 180000000,
+          "note": "Approx. 12 periods"
+        },
+        {
+          "label": "Allowances/bonus (annual)",
+          "value": 0,
+          "note": "Fixed/variable allowances & bonus"
+        },
+        {
+          "label": "Total gross income",
+          "value": 180000000,
+          "variant": "subtotal",
+          "note": "Total gross income"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "B. Deductions",
+          "variant": "group"
+        },
+        {
+          "label": "Job-related deduction",
+          "value": -6000000,
+          "note": "5% of gross, max 6M/year"
+        },
+        {
+          "label": "Pension/JHT contribution",
+          "value": 0,
+          "note": "Employee-paid portion"
+        },
+        {
+          "label": "Total deductions",
+          "value": -6000000,
+          "variant": "subtotal"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "C. Tax base",
+          "variant": "group"
+        },
+        {
+          "label": "Net income",
+          "value": 174000000,
+          "note": "Gross − deductions"
+        },
+        {
+          "label": "PTKP",
+          "value": -58500000,
+          "note": "Based on family status"
+        },
+        {
+          "label": "Rounded PKP",
+          "value": 115500000,
+          "variant": "subtotal"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "D. Tax due (Pasal 17)",
+          "variant": "group"
+        },
+        {
+          "label": "Tier 1: 5% × 60.000.000",
+          "value": 3000000,
+          "note": "Lapisan PKP 0 – 60.000.000"
+        },
+        {
+          "label": "Tier 2: 15% × 55.500.000",
+          "value": 8325000,
+          "note": "Lapisan PKP 60.000.000 – 115.500.000"
+        },
+        {
+          "label": "Total annual PPh 21",
+          "value": 11325000,
+          "variant": "subtotal",
+          "note": "Full-year liability"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "E. Settlement status",
+          "variant": "group"
+        },
+        {
+          "id": "ter_per_period",
+          "label": "PPh 21 TER per period",
+          "value": 900000,
+          "note": "6% × gross per period"
+        },
+        {
+          "label": "(-) TER withheld Jan–Nov",
+          "value": -9900000,
+          "note": "6% × 11 periods"
+        },
+        {
+          "id": "december_adjustment",
+          "label": "December adjustment (underpaid)",
+          "value": 1425000,
+          "variant": "total",
+          "note": "Remaining liability in December"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "F. Take-home pay",
+          "variant": "group"
+        },
+        {
+          "id": "take_home_annual",
+          "label": "Annual take-home",
+          "value": 168675000,
+          "note": "Gross − tax"
+        },
+        {
+          "id": "take_home_period",
+          "label": "Take-home per period",
+          "value": 14056250,
+          "note": "12 periods"
+        }
+      ]
+    },
+    {
+      "id": "15000000-K/2",
+      "gross": 15000000,
+      "ptkp": "K/2",
+      "input": {
+        "subjectType": "pegawai_tetap",
+        "brutoMonthly": 15000000,
+        "monthsPaid": 12,
+        "pensionContribution": 0,
+        "zakatOrDonation": 0,
+        "ptkpStatus": "K/2",
+        "scheme": "ter",
+        "terCategory": "B",
+        "bonusAnnual": 0,
+        "foreignTaxRate": 20,
+        "isDailyWorker": false
+      },
+      "monthlyTer": 900000,
+      "decemberAdjustment": 75000,
+      "totalTaxYear": 9975000,
+      "rows": [
+        {
+          "label": "A. Gross income",
+          "variant": "group"
+        },
+        {
+          "label": "Base salary (annual)",
+          "value": 180000000,
+          "note": "Approx. 12 periods"
+        },
+        {
+          "label": "Allowances/bonus (annual)",
+          "value": 0,
+          "note": "Fixed/variable allowances & bonus"
+        },
+        {
+          "label": "Total gross income",
+          "value": 180000000,
+          "variant": "subtotal",
+          "note": "Total gross income"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "B. Deductions",
+          "variant": "group"
+        },
+        {
+          "label": "Job-related deduction",
+          "value": -6000000,
+          "note": "5% of gross, max 6M/year"
+        },
+        {
+          "label": "Pension/JHT contribution",
+          "value": 0,
+          "note": "Employee-paid portion"
+        },
+        {
+          "label": "Total deductions",
+          "value": -6000000,
+          "variant": "subtotal"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "C. Tax base",
+          "variant": "group"
+        },
+        {
+          "label": "Net income",
+          "value": 174000000,
+          "note": "Gross − deductions"
+        },
+        {
+          "label": "PTKP",
+          "value": -67500000,
+          "note": "Based on family status"
+        },
+        {
+          "label": "Rounded PKP",
+          "value": 106500000,
+          "variant": "subtotal"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "D. Tax due (Pasal 17)",
+          "variant": "group"
+        },
+        {
+          "label": "Tier 1: 5% × 60.000.000",
+          "value": 3000000,
+          "note": "Lapisan PKP 0 – 60.000.000"
+        },
+        {
+          "label": "Tier 2: 15% × 46.500.000",
+          "value": 6975000,
+          "note": "Lapisan PKP 60.000.000 – 106.500.000"
+        },
+        {
+          "label": "Total annual PPh 21",
+          "value": 9975000,
+          "variant": "subtotal",
+          "note": "Full-year liability"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "E. Settlement status",
+          "variant": "group"
+        },
+        {
+          "id": "ter_per_period",
+          "label": "PPh 21 TER per period",
+          "value": 900000,
+          "note": "6% × gross per period"
+        },
+        {
+          "label": "(-) TER withheld Jan–Nov",
+          "value": -9900000,
+          "note": "6% × 11 periods"
+        },
+        {
+          "id": "december_adjustment",
+          "label": "December adjustment (underpaid)",
+          "value": 75000,
+          "variant": "total",
+          "note": "Remaining liability in December"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "F. Take-home pay",
+          "variant": "group"
+        },
+        {
+          "id": "take_home_annual",
+          "label": "Annual take-home",
+          "value": 170025000,
+          "note": "Gross − tax"
+        },
+        {
+          "id": "take_home_period",
+          "label": "Take-home per period",
+          "value": 14168750,
+          "note": "12 periods"
+        }
+      ]
+    },
+    {
+      "id": "25000000-TK/0",
+      "gross": 25000000,
+      "ptkp": "TK/0",
+      "input": {
+        "subjectType": "pegawai_tetap",
+        "brutoMonthly": 25000000,
+        "monthsPaid": 12,
+        "pensionContribution": 0,
+        "zakatOrDonation": 0,
+        "ptkpStatus": "TK/0",
+        "scheme": "ter",
+        "terCategory": "A",
+        "bonusAnnual": 0,
+        "foreignTaxRate": 20,
+        "isDailyWorker": false
+      },
+      "monthlyTer": 2500000,
+      "decemberAdjustment": 2500000,
+      "totalTaxYear": 30000000,
+      "rows": [
+        {
+          "label": "A. Gross income",
+          "variant": "group"
+        },
+        {
+          "label": "Base salary (annual)",
+          "value": 300000000,
+          "note": "Approx. 12 periods"
+        },
+        {
+          "label": "Allowances/bonus (annual)",
+          "value": 0,
+          "note": "Fixed/variable allowances & bonus"
+        },
+        {
+          "label": "Total gross income",
+          "value": 300000000,
+          "variant": "subtotal",
+          "note": "Total gross income"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "B. Deductions",
+          "variant": "group"
+        },
+        {
+          "label": "Job-related deduction",
+          "value": -6000000,
+          "note": "5% of gross, max 6M/year"
+        },
+        {
+          "label": "Pension/JHT contribution",
+          "value": 0,
+          "note": "Employee-paid portion"
+        },
+        {
+          "label": "Total deductions",
+          "value": -6000000,
+          "variant": "subtotal"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "C. Tax base",
+          "variant": "group"
+        },
+        {
+          "label": "Net income",
+          "value": 294000000,
+          "note": "Gross − deductions"
+        },
+        {
+          "label": "PTKP",
+          "value": -54000000,
+          "note": "Based on family status"
+        },
+        {
+          "label": "Rounded PKP",
+          "value": 240000000,
+          "variant": "subtotal"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "D. Tax due (Pasal 17)",
+          "variant": "group"
+        },
+        {
+          "label": "Tier 1: 5% × 60.000.000",
+          "value": 3000000,
+          "note": "Lapisan PKP 0 – 60.000.000"
+        },
+        {
+          "label": "Tier 2: 15% × 180.000.000",
+          "value": 27000000,
+          "note": "Lapisan PKP 60.000.000 – 240.000.000"
+        },
+        {
+          "label": "Total annual PPh 21",
+          "value": 30000000,
+          "variant": "subtotal",
+          "note": "Full-year liability"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "E. Settlement status",
+          "variant": "group"
+        },
+        {
+          "id": "ter_per_period",
+          "label": "PPh 21 TER per period",
+          "value": 2500000,
+          "note": "10% × gross per period"
+        },
+        {
+          "label": "(-) TER withheld Jan–Nov",
+          "value": -27500000,
+          "note": "10% × 11 periods"
+        },
+        {
+          "id": "december_adjustment",
+          "label": "December adjustment (underpaid)",
+          "value": 2500000,
+          "variant": "total",
+          "note": "Remaining liability in December"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "F. Take-home pay",
+          "variant": "group"
+        },
+        {
+          "id": "take_home_annual",
+          "label": "Annual take-home",
+          "value": 270000000,
+          "note": "Gross − tax"
+        },
+        {
+          "id": "take_home_period",
+          "label": "Take-home per period",
+          "value": 22500000,
+          "note": "12 periods"
+        }
+      ]
+    },
+    {
+      "id": "25000000-K/0",
+      "gross": 25000000,
+      "ptkp": "K/0",
+      "input": {
+        "subjectType": "pegawai_tetap",
+        "brutoMonthly": 25000000,
+        "monthsPaid": 12,
+        "pensionContribution": 0,
+        "zakatOrDonation": 0,
+        "ptkpStatus": "K/0",
+        "scheme": "ter",
+        "terCategory": "A",
+        "bonusAnnual": 0,
+        "foreignTaxRate": 20,
+        "isDailyWorker": false
+      },
+      "monthlyTer": 2500000,
+      "decemberAdjustment": 1825000,
+      "totalTaxYear": 29325000,
+      "rows": [
+        {
+          "label": "A. Gross income",
+          "variant": "group"
+        },
+        {
+          "label": "Base salary (annual)",
+          "value": 300000000,
+          "note": "Approx. 12 periods"
+        },
+        {
+          "label": "Allowances/bonus (annual)",
+          "value": 0,
+          "note": "Fixed/variable allowances & bonus"
+        },
+        {
+          "label": "Total gross income",
+          "value": 300000000,
+          "variant": "subtotal",
+          "note": "Total gross income"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "B. Deductions",
+          "variant": "group"
+        },
+        {
+          "label": "Job-related deduction",
+          "value": -6000000,
+          "note": "5% of gross, max 6M/year"
+        },
+        {
+          "label": "Pension/JHT contribution",
+          "value": 0,
+          "note": "Employee-paid portion"
+        },
+        {
+          "label": "Total deductions",
+          "value": -6000000,
+          "variant": "subtotal"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "C. Tax base",
+          "variant": "group"
+        },
+        {
+          "label": "Net income",
+          "value": 294000000,
+          "note": "Gross − deductions"
+        },
+        {
+          "label": "PTKP",
+          "value": -58500000,
+          "note": "Based on family status"
+        },
+        {
+          "label": "Rounded PKP",
+          "value": 235500000,
+          "variant": "subtotal"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "D. Tax due (Pasal 17)",
+          "variant": "group"
+        },
+        {
+          "label": "Tier 1: 5% × 60.000.000",
+          "value": 3000000,
+          "note": "Lapisan PKP 0 – 60.000.000"
+        },
+        {
+          "label": "Tier 2: 15% × 175.500.000",
+          "value": 26325000,
+          "note": "Lapisan PKP 60.000.000 – 235.500.000"
+        },
+        {
+          "label": "Total annual PPh 21",
+          "value": 29325000,
+          "variant": "subtotal",
+          "note": "Full-year liability"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "E. Settlement status",
+          "variant": "group"
+        },
+        {
+          "id": "ter_per_period",
+          "label": "PPh 21 TER per period",
+          "value": 2500000,
+          "note": "10% × gross per period"
+        },
+        {
+          "label": "(-) TER withheld Jan–Nov",
+          "value": -27500000,
+          "note": "10% × 11 periods"
+        },
+        {
+          "id": "december_adjustment",
+          "label": "December adjustment (underpaid)",
+          "value": 1825000,
+          "variant": "total",
+          "note": "Remaining liability in December"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "F. Take-home pay",
+          "variant": "group"
+        },
+        {
+          "id": "take_home_annual",
+          "label": "Annual take-home",
+          "value": 270675000,
+          "note": "Gross − tax"
+        },
+        {
+          "id": "take_home_period",
+          "label": "Take-home per period",
+          "value": 22556250,
+          "note": "12 periods"
+        }
+      ]
+    },
+    {
+      "id": "25000000-K/2",
+      "gross": 25000000,
+      "ptkp": "K/2",
+      "input": {
+        "subjectType": "pegawai_tetap",
+        "brutoMonthly": 25000000,
+        "monthsPaid": 12,
+        "pensionContribution": 0,
+        "zakatOrDonation": 0,
+        "ptkpStatus": "K/2",
+        "scheme": "ter",
+        "terCategory": "B",
+        "bonusAnnual": 0,
+        "foreignTaxRate": 20,
+        "isDailyWorker": false
+      },
+      "monthlyTer": 2250000,
+      "decemberAdjustment": 3225000,
+      "totalTaxYear": 27975000,
+      "rows": [
+        {
+          "label": "A. Gross income",
+          "variant": "group"
+        },
+        {
+          "label": "Base salary (annual)",
+          "value": 300000000,
+          "note": "Approx. 12 periods"
+        },
+        {
+          "label": "Allowances/bonus (annual)",
+          "value": 0,
+          "note": "Fixed/variable allowances & bonus"
+        },
+        {
+          "label": "Total gross income",
+          "value": 300000000,
+          "variant": "subtotal",
+          "note": "Total gross income"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "B. Deductions",
+          "variant": "group"
+        },
+        {
+          "label": "Job-related deduction",
+          "value": -6000000,
+          "note": "5% of gross, max 6M/year"
+        },
+        {
+          "label": "Pension/JHT contribution",
+          "value": 0,
+          "note": "Employee-paid portion"
+        },
+        {
+          "label": "Total deductions",
+          "value": -6000000,
+          "variant": "subtotal"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "C. Tax base",
+          "variant": "group"
+        },
+        {
+          "label": "Net income",
+          "value": 294000000,
+          "note": "Gross − deductions"
+        },
+        {
+          "label": "PTKP",
+          "value": -67500000,
+          "note": "Based on family status"
+        },
+        {
+          "label": "Rounded PKP",
+          "value": 226500000,
+          "variant": "subtotal"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "D. Tax due (Pasal 17)",
+          "variant": "group"
+        },
+        {
+          "label": "Tier 1: 5% × 60.000.000",
+          "value": 3000000,
+          "note": "Lapisan PKP 0 – 60.000.000"
+        },
+        {
+          "label": "Tier 2: 15% × 166.500.000",
+          "value": 24975000,
+          "note": "Lapisan PKP 60.000.000 – 226.500.000"
+        },
+        {
+          "label": "Total annual PPh 21",
+          "value": 27975000,
+          "variant": "subtotal",
+          "note": "Full-year liability"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "E. Settlement status",
+          "variant": "group"
+        },
+        {
+          "id": "ter_per_period",
+          "label": "PPh 21 TER per period",
+          "value": 2250000,
+          "note": "9% × gross per period"
+        },
+        {
+          "label": "(-) TER withheld Jan–Nov",
+          "value": -24750000,
+          "note": "9% × 11 periods"
+        },
+        {
+          "id": "december_adjustment",
+          "label": "December adjustment (underpaid)",
+          "value": 3225000,
+          "variant": "total",
+          "note": "Remaining liability in December"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "F. Take-home pay",
+          "variant": "group"
+        },
+        {
+          "id": "take_home_annual",
+          "label": "Annual take-home",
+          "value": 272025000,
+          "note": "Gross − tax"
+        },
+        {
+          "id": "take_home_period",
+          "label": "Take-home per period",
+          "value": 22668750,
+          "note": "12 periods"
+        }
+      ]
+    },
+    {
+      "id": "50000000-TK/0",
+      "gross": 50000000,
+      "ptkp": "TK/0",
+      "input": {
+        "subjectType": "pegawai_tetap",
+        "brutoMonthly": 50000000,
+        "monthsPaid": 12,
+        "pensionContribution": 0,
+        "zakatOrDonation": 0,
+        "ptkpStatus": "TK/0",
+        "scheme": "ter",
+        "terCategory": "A",
+        "bonusAnnual": 0,
+        "foreignTaxRate": 20,
+        "isDailyWorker": false
+      },
+      "monthlyTer": 9000000,
+      "decemberAdjustment": 7000000,
+      "totalTaxYear": 106000000,
+      "rows": [
+        {
+          "label": "A. Gross income",
+          "variant": "group"
+        },
+        {
+          "label": "Base salary (annual)",
+          "value": 600000000,
+          "note": "Approx. 12 periods"
+        },
+        {
+          "label": "Allowances/bonus (annual)",
+          "value": 0,
+          "note": "Fixed/variable allowances & bonus"
+        },
+        {
+          "label": "Total gross income",
+          "value": 600000000,
+          "variant": "subtotal",
+          "note": "Total gross income"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "B. Deductions",
+          "variant": "group"
+        },
+        {
+          "label": "Job-related deduction",
+          "value": -6000000,
+          "note": "5% of gross, max 6M/year"
+        },
+        {
+          "label": "Pension/JHT contribution",
+          "value": 0,
+          "note": "Employee-paid portion"
+        },
+        {
+          "label": "Total deductions",
+          "value": -6000000,
+          "variant": "subtotal"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "C. Tax base",
+          "variant": "group"
+        },
+        {
+          "label": "Net income",
+          "value": 594000000,
+          "note": "Gross − deductions"
+        },
+        {
+          "label": "PTKP",
+          "value": -54000000,
+          "note": "Based on family status"
+        },
+        {
+          "label": "Rounded PKP",
+          "value": 540000000,
+          "variant": "subtotal"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "D. Tax due (Pasal 17)",
+          "variant": "group"
+        },
+        {
+          "label": "Tier 1: 5% × 60.000.000",
+          "value": 3000000,
+          "note": "Lapisan PKP 0 – 60.000.000"
+        },
+        {
+          "label": "Tier 2: 15% × 190.000.000",
+          "value": 28500000,
+          "note": "Lapisan PKP 60.000.000 – 250.000.000"
+        },
+        {
+          "label": "Tier 3: 25% × 250.000.000",
+          "value": 62500000,
+          "note": "Lapisan PKP 250.000.000 – 500.000.000"
+        },
+        {
+          "label": "Tier 4: 30% × 40.000.000",
+          "value": 12000000,
+          "note": "Lapisan PKP 500.000.000 – 540.000.000"
+        },
+        {
+          "label": "Total annual PPh 21",
+          "value": 106000000,
+          "variant": "subtotal",
+          "note": "Full-year liability"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "E. Settlement status",
+          "variant": "group"
+        },
+        {
+          "id": "ter_per_period",
+          "label": "PPh 21 TER per period",
+          "value": 9000000,
+          "note": "18% × gross per period"
+        },
+        {
+          "label": "(-) TER withheld Jan–Nov",
+          "value": -99000000,
+          "note": "18% × 11 periods"
+        },
+        {
+          "id": "december_adjustment",
+          "label": "December adjustment (underpaid)",
+          "value": 7000000,
+          "variant": "total",
+          "note": "Remaining liability in December"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "F. Take-home pay",
+          "variant": "group"
+        },
+        {
+          "id": "take_home_annual",
+          "label": "Annual take-home",
+          "value": 494000000,
+          "note": "Gross − tax"
+        },
+        {
+          "id": "take_home_period",
+          "label": "Take-home per period",
+          "value": 41166667,
+          "note": "12 periods"
+        }
+      ]
+    },
+    {
+      "id": "50000000-K/0",
+      "gross": 50000000,
+      "ptkp": "K/0",
+      "input": {
+        "subjectType": "pegawai_tetap",
+        "brutoMonthly": 50000000,
+        "monthsPaid": 12,
+        "pensionContribution": 0,
+        "zakatOrDonation": 0,
+        "ptkpStatus": "K/0",
+        "scheme": "ter",
+        "terCategory": "A",
+        "bonusAnnual": 0,
+        "foreignTaxRate": 20,
+        "isDailyWorker": false
+      },
+      "monthlyTer": 9000000,
+      "decemberAdjustment": 5650000,
+      "totalTaxYear": 104650000,
+      "rows": [
+        {
+          "label": "A. Gross income",
+          "variant": "group"
+        },
+        {
+          "label": "Base salary (annual)",
+          "value": 600000000,
+          "note": "Approx. 12 periods"
+        },
+        {
+          "label": "Allowances/bonus (annual)",
+          "value": 0,
+          "note": "Fixed/variable allowances & bonus"
+        },
+        {
+          "label": "Total gross income",
+          "value": 600000000,
+          "variant": "subtotal",
+          "note": "Total gross income"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "B. Deductions",
+          "variant": "group"
+        },
+        {
+          "label": "Job-related deduction",
+          "value": -6000000,
+          "note": "5% of gross, max 6M/year"
+        },
+        {
+          "label": "Pension/JHT contribution",
+          "value": 0,
+          "note": "Employee-paid portion"
+        },
+        {
+          "label": "Total deductions",
+          "value": -6000000,
+          "variant": "subtotal"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "C. Tax base",
+          "variant": "group"
+        },
+        {
+          "label": "Net income",
+          "value": 594000000,
+          "note": "Gross − deductions"
+        },
+        {
+          "label": "PTKP",
+          "value": -58500000,
+          "note": "Based on family status"
+        },
+        {
+          "label": "Rounded PKP",
+          "value": 535500000,
+          "variant": "subtotal"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "D. Tax due (Pasal 17)",
+          "variant": "group"
+        },
+        {
+          "label": "Tier 1: 5% × 60.000.000",
+          "value": 3000000,
+          "note": "Lapisan PKP 0 – 60.000.000"
+        },
+        {
+          "label": "Tier 2: 15% × 190.000.000",
+          "value": 28500000,
+          "note": "Lapisan PKP 60.000.000 – 250.000.000"
+        },
+        {
+          "label": "Tier 3: 25% × 250.000.000",
+          "value": 62500000,
+          "note": "Lapisan PKP 250.000.000 – 500.000.000"
+        },
+        {
+          "label": "Tier 4: 30% × 35.500.000",
+          "value": 10650000,
+          "note": "Lapisan PKP 500.000.000 – 535.500.000"
+        },
+        {
+          "label": "Total annual PPh 21",
+          "value": 104650000,
+          "variant": "subtotal",
+          "note": "Full-year liability"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "E. Settlement status",
+          "variant": "group"
+        },
+        {
+          "id": "ter_per_period",
+          "label": "PPh 21 TER per period",
+          "value": 9000000,
+          "note": "18% × gross per period"
+        },
+        {
+          "label": "(-) TER withheld Jan–Nov",
+          "value": -99000000,
+          "note": "18% × 11 periods"
+        },
+        {
+          "id": "december_adjustment",
+          "label": "December adjustment (underpaid)",
+          "value": 5650000,
+          "variant": "total",
+          "note": "Remaining liability in December"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "F. Take-home pay",
+          "variant": "group"
+        },
+        {
+          "id": "take_home_annual",
+          "label": "Annual take-home",
+          "value": 495350000,
+          "note": "Gross − tax"
+        },
+        {
+          "id": "take_home_period",
+          "label": "Take-home per period",
+          "value": 41279167,
+          "note": "12 periods"
+        }
+      ]
+    },
+    {
+      "id": "50000000-K/2",
+      "gross": 50000000,
+      "ptkp": "K/2",
+      "input": {
+        "subjectType": "pegawai_tetap",
+        "brutoMonthly": 50000000,
+        "monthsPaid": 12,
+        "pensionContribution": 0,
+        "zakatOrDonation": 0,
+        "ptkpStatus": "K/2",
+        "scheme": "ter",
+        "terCategory": "B",
+        "bonusAnnual": 0,
+        "foreignTaxRate": 20,
+        "isDailyWorker": false
+      },
+      "monthlyTer": 9000000,
+      "decemberAdjustment": 2950000,
+      "totalTaxYear": 101950000,
+      "rows": [
+        {
+          "label": "A. Gross income",
+          "variant": "group"
+        },
+        {
+          "label": "Base salary (annual)",
+          "value": 600000000,
+          "note": "Approx. 12 periods"
+        },
+        {
+          "label": "Allowances/bonus (annual)",
+          "value": 0,
+          "note": "Fixed/variable allowances & bonus"
+        },
+        {
+          "label": "Total gross income",
+          "value": 600000000,
+          "variant": "subtotal",
+          "note": "Total gross income"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "B. Deductions",
+          "variant": "group"
+        },
+        {
+          "label": "Job-related deduction",
+          "value": -6000000,
+          "note": "5% of gross, max 6M/year"
+        },
+        {
+          "label": "Pension/JHT contribution",
+          "value": 0,
+          "note": "Employee-paid portion"
+        },
+        {
+          "label": "Total deductions",
+          "value": -6000000,
+          "variant": "subtotal"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "C. Tax base",
+          "variant": "group"
+        },
+        {
+          "label": "Net income",
+          "value": 594000000,
+          "note": "Gross − deductions"
+        },
+        {
+          "label": "PTKP",
+          "value": -67500000,
+          "note": "Based on family status"
+        },
+        {
+          "label": "Rounded PKP",
+          "value": 526500000,
+          "variant": "subtotal"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "D. Tax due (Pasal 17)",
+          "variant": "group"
+        },
+        {
+          "label": "Tier 1: 5% × 60.000.000",
+          "value": 3000000,
+          "note": "Lapisan PKP 0 – 60.000.000"
+        },
+        {
+          "label": "Tier 2: 15% × 190.000.000",
+          "value": 28500000,
+          "note": "Lapisan PKP 60.000.000 – 250.000.000"
+        },
+        {
+          "label": "Tier 3: 25% × 250.000.000",
+          "value": 62500000,
+          "note": "Lapisan PKP 250.000.000 – 500.000.000"
+        },
+        {
+          "label": "Tier 4: 30% × 26.500.000",
+          "value": 7950000,
+          "note": "Lapisan PKP 500.000.000 – 526.500.000"
+        },
+        {
+          "label": "Total annual PPh 21",
+          "value": 101950000,
+          "variant": "subtotal",
+          "note": "Full-year liability"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "E. Settlement status",
+          "variant": "group"
+        },
+        {
+          "id": "ter_per_period",
+          "label": "PPh 21 TER per period",
+          "value": 9000000,
+          "note": "18% × gross per period"
+        },
+        {
+          "label": "(-) TER withheld Jan–Nov",
+          "value": -99000000,
+          "note": "18% × 11 periods"
+        },
+        {
+          "id": "december_adjustment",
+          "label": "December adjustment (underpaid)",
+          "value": 2950000,
+          "variant": "total",
+          "note": "Remaining liability in December"
+        },
+        {
+          "label": "",
+          "variant": "spacer"
+        },
+        {
+          "label": "F. Take-home pay",
+          "variant": "group"
+        },
+        {
+          "id": "take_home_annual",
+          "label": "Annual take-home",
+          "value": 498050000,
+          "note": "Gross − tax"
+        },
+        {
+          "id": "take_home_period",
+          "label": "Take-home per period",
+          "value": 41504167,
+          "note": "12 periods"
+        }
+      ]
+    }
+  ]
+}

@@ -211,3 +211,6 @@ select:disabled { opacity: 0.6; }
   .stage { animation: none; }
   .btn, .routes a, .top nav a { transition: none; }
 }
+
+/* Negative display tracking closes the word gaps; put them back. */
+h1, h2, .routes .name, .figures .lead dd, .brand { word-spacing: 0.1em; }

@@ -1,0 +1,21 @@
+/*
+  Content-Security-Policy: default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; font-src 'self'; form-action 'none'; frame-ancestors 'none'; base-uri 'none'
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=(), browsing-topics=()
+  Strict-Transport-Security: max-age=31536000
+  Cross-Origin-Opener-Policy: same-origin
+
+# File names carry a content hash: a changed file gets a new name.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Cloudflare injects its Web Analytics beacon into HTML unless the response says no-transform.
+# The page has no analytics and its CSP blocks the beacon, so say so for every HTML response.
+/
+  Cache-Control: public, max-age=0, must-revalidate, no-transform
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate, no-transform
+/404.html
+  Cache-Control: public, max-age=0, must-revalidate, no-transform

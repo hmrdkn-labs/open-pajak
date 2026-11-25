@@ -1,20 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{lang}}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Open Pajak: Indonesian tax calculators that show every step</title>
-<meta name="description" content="Free calculators for Indonesian PPh 21, 22, 23, 26, 4(2), PPN and PPNBM, with the code public on GitHub. Every step is shown and your numbers stay in your browser.">
-<meta name="theme-color" content="#0a2540">
-<link rel="canonical" href="https://open-pajak.hamardikan.com/">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Open Pajak: Indonesian tax calculators that show every step">
-<meta property="og:description" content="Free calculators for PPh 21, 22, 23, 26, 4(2), PPN and PPNBM. Every step is shown, and your numbers stay in your browser.">
-<meta property="og:url" content="https://open-pajak.hamardikan.com/">
-<meta property="og:image" content="https://open-pajak.hamardikan.com/og.png">
-<meta property="og:image:alt" content="Open Pajak: Indonesian tax, worked out line by line, over an illustration of blank tax forms on a navy desk.">
-<meta name="twitter:card" content="summary_large_image">
+{{head_meta}}
 <link rel="preload" href="{{font:plus-jakarta-sans-latin-800-normal.woff2}}" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{{font:public-sans-latin-400-normal.woff2}}" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{{css}}">
@@ -22,52 +11,53 @@
 <script src="{{app}}" defer></script>
 </head>
 <body>
-<a class="skip" href="#main">Skip to content</a>
+<a class="skip" href="#main">{{skip}}</a>
 
 <header class="top">
-  <a class="brand" href="#top" aria-label="Open Pajak, top of page">Open Pajak</a>
-  <nav aria-label="Sections">
-    <a href="#example">Example</a>
-    <a href="#calculators">Calculators</a>
-    <a href="#source">Source</a>
+  <a class="brand" href="#top" aria-label="{{brand_aria}}">{{logo}}<span>Open Pajak</span></a>
+  <nav aria-label="{{nav_label}}">
+    <a href="#example">{{nav_example}}</a>
+    <a href="#calculators">{{nav_calculators}}</a>
+    <a href="#source">{{nav_source}}</a>
+    <a class="lang" href="{{switch_href}}" hreflang="{{switch_lang}}" lang="{{switch_lang}}">{{switch_text}}</a>
   </nav>
 </header>
 
 <main id="main">
   <section class="hero" id="top">
-    <h1>Indonesian tax, worked out line by line</h1>
-    <p>Check PPh 21, PPN and five more Indonesian taxes step by step. Your numbers never leave your browser.</p>
-    <p><a class="btn gold" href="https://openpajak.hamardikan.com/">Open the calculator</a></p>
+    <h1>{{h1}}</h1>
+    <p>{{hero_p}}</p>
+    <p><a class="btn gold" href="https://openpajak.hamardikan.com/">{{cta}}</a></p>
     {{hero_pic}}
   </section>
 
   <section class="band" id="example" aria-labelledby="example-h">
     <div class="wrap example">
       <div class="side">
-        <h2 id="example-h">See where every rupiah of PPh 21 goes</h2>
-        <p>PPh 21 is the income tax withheld from salaries. This ledger is one employee on the monthly effective rate scheme (TER), paid for twelve months with no bonus. Pick a monthly gross and a PTKP status, the non-taxable income set by family status.</p>
+        <h2 id="example-h">{{example_h}}</h2>
+        <p>{{example_p}}</p>
         <div class="controls">
-          <label>Monthly gross
+          <label>{{label_gross}}
             <select id="gross" disabled>
 {{gross_options}}
             </select>
           </label>
-          <label>PTKP status
+          <label>{{label_ptkp}}
             <select id="ptkp" disabled>
 {{ptkp_options}}
             </select>
           </label>
         </div>
-        <noscript><p class="prose">Switching the inputs needs JavaScript. This is the default case.</p></noscript>
+        <noscript><p class="prose">{{noscript}}</p></noscript>
         <dl class="figures" aria-live="polite" id="figures">
 {{figures}}
         </dl>
-        <p class="prose">Sample inputs, not a real payslip. PKP is taxable income after PTKP. The ledger is produced by <a href="https://github.com/hmrdkn-labs/open-pajak/blob/{{branch}}/open-pajak-v1/src/lib/tax/pph21.ts"><code>pph21.ts</code></a>, the rule file the calculator runs.</p>
+        <p class="prose">{{prose_sample}}</p>
       </div>
-      <div class="sheet" id="sheet" data-src="{{scenarios_url}}">
+      <div class="sheet" id="sheet" data-src="{{scenarios_url}}" data-error="{{load_error}}">
         <table class="ledger">
           <caption id="ledger-cap">{{caption}}</caption>
-          <thead><tr><th scope="col">Step</th><th scope="col" class="num">Rp</th></tr></thead>
+          <thead><tr><th scope="col">{{th_step}}</th><th scope="col" class="num">Rp</th></tr></thead>
           <tbody id="ledger-body">
 {{ledger}}
           </tbody>
@@ -77,7 +67,7 @@
   </section>
 
   <section class="wrap" id="calculators" aria-labelledby="calc-h">
-    <h2 id="calc-h">Pick the tax you need to check</h2>
+    <h2 id="calc-h">{{calc_h}}</h2>
     <ul class="routes">
 {{routes}}
     </ul>
@@ -85,9 +75,9 @@
 
   <section class="split rules" id="rules" aria-labelledby="rules-h">
     <div class="text">
-      <h2 id="rules-h">Rules that come from DJP’s own book</h2>
-      <p>The PPh 21 and PPh 26 calculators cite Buku PPh 21/26, the guide from the Directorate General of Taxes (DJP) released on 8 January 2024. Each result comes with a step-by-step table and a formula narrative, so you can follow the rule instead of trusting a total.</p>
-      <p>The rule files sit in the repository next to the calculators, one per tax, written as plain functions. The app ships the guide too: <a href="https://openpajak.hamardikan.com/Buku_PPh2126_Release_20240108.pdf">Buku PPh 21/26, release 8 January 2024 (PDF)</a>.</p>
+      <h2 id="rules-h">{{rules_h}}</h2>
+      <p>{{rules_p1}}</p>
+      <p>{{rules_p2}}</p>
     </div>
     {{handbook_pic}}
   </section>
@@ -95,29 +85,29 @@
   <section class="band split privacy" id="privacy" aria-labelledby="privacy-h">
     {{receipts_pic}}
     <div class="text">
-      <h2 id="privacy-h">Your numbers stay on your device</h2>
-      <p>Open Pajak runs entirely in your browser, with no backend. It asks for numbers and transaction types, never for NIK, names or addresses.</p>
-      <p>Save a calculation as a receipt and it stays in your browser’s local storage. Export receipts to Excel or PDF, or upload a spreadsheet to create a batch of receipts offline.</p>
+      <h2 id="privacy-h">{{privacy_h}}</h2>
+      <p>{{privacy_p1}}</p>
+      <p>{{privacy_p2}}</p>
     </div>
   </section>
 
   <section class="wrap open" id="source" aria-labelledby="source-h">
     <div class="head">
-      <h2 id="source-h">Built in the open</h2>
-      <p><a class="btn" href="https://github.com/hmrdkn-labs/open-pajak">Read the source on GitHub</a></p>
+      <h2 id="source-h">{{open_h}}</h2>
+      <p><a class="btn" href="https://github.com/hmrdkn-labs/open-pajak">{{open_btn}}</a></p>
     </div>
     <div class="body">
       <p>{{stars_line}}</p>
-      <p>The code is public to read. No licence is granted, so ask the owner before reusing it.</p>
-      <p>Open Pajak is maintained by <a href="https://github.com/hamardikan">hamardikan</a>. The README credits <a href="https://github.com/lynxluna">lynxluna</a> (Didiet Noor), <a href="https://github.com/revanp">revanp</a> (Revan Pratama) and <a href="https://github.com/ulilalbabn">ulilalbabn</a> (Ulil Albab), and everyone who reports bugs or suggests changes.</p>
+      <p>{{open_p1}}</p>
+      <p>{{open_p2}}</p>
     </div>
   </section>
 
   <section class="close" aria-labelledby="close-h">
     <div class="wrap">
-      <h2 id="close-h">Use the result as a check, not as advice</h2>
-      <p>Consult professional tax advisors before relying on the outputs for filings.</p>
-      <p><a class="btn gold" href="https://openpajak.hamardikan.com/">Open the calculator</a></p>
+      <h2 id="close-h">{{close_h}}</h2>
+      <p>{{close_p}}</p>
+      <p><a class="btn gold" href="https://openpajak.hamardikan.com/">{{cta}}</a></p>
     </div>
   </section>
 </main>
@@ -126,10 +116,18 @@
   <div class="wrap">
     <p class="brand">Open Pajak</p>
     <p>
-      <a href="https://github.com/hmrdkn-labs/open-pajak">Repository</a>
-      <a href="https://hamardikan.com">hamardikan.com</a>
+      <a href="https://github.com/hmrdkn-labs/open-pajak">{{foot_repo}}</a>
+      <a href="https://hamardikan.com/">hamardikan.com</a>
+      <a href="{{switch_href}}" hreflang="{{switch_lang}}" lang="{{switch_lang}}">{{switch_text}}</a>
     </p>
-    <p class="muted">Deployed from <code>{{sha}}</code> on {{builddate}}. GitHub counts as of {{snapdate}}.</p>
+    <p class="more">{{more_label}}:
+      <a href="https://agentawake.hamardikan.com/">Agent Awake</a>
+      <a href="https://whiteboard.hamardikan.com/">Whiteboard</a>
+      <a href="https://lazyss.hamardikan.com/">lazyss</a>
+      <a href="https://kubecompass.hamardikan.com/">KubeCompass</a>
+      <a href="https://hamardikan.com/">hamardikan.com</a>
+    </p>
+    <p class="muted">{{foot_deploy}}</p>
   </div>
 </footer>
 </body>

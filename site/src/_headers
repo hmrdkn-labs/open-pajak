@@ -17,5 +17,9 @@
   Cache-Control: public, max-age=0, must-revalidate, no-transform
 /index.html
   Cache-Control: public, max-age=0, must-revalidate, no-transform
+/en/
+  Cache-Control: public, max-age=0, must-revalidate, no-transform
+/en/index.html
+  Cache-Control: public, max-age=0, must-revalidate, no-transform
 /404.html
   Cache-Control: public, max-age=0, must-revalidate, no-transform

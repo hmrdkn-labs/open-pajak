@@ -1,5 +1,11 @@
 # Site notes
 
+Two pages from one template: `/` is Indonesian (`src/i18n/id.json`), `/en/` is English (`src/i18n/en.json`), rendered by `scripts/build.mjs`. Search decisions are in `~/workspace/sandbox/showcase-scan/build/v3/open-pajak/SEO.md`.
+
+## Logo provenance
+
+`src/logo.svg` (also `src/favicon.svg`, `src/apple-touch-icon.png`, the header mark and the mark in `og.png`/`og-id.png`) is the project's "OP" mark from `open-pajak-v1/public/favicon.svg` (96x96, rect rx 22 `#0F1E3D`, "O" `#FFFFFF` at x 22, "P" `#F9C74F` at x 48, baseline y 62, Inter 700 at 44 px). `scripts/logo.mjs` outlines both letters from Inter Bold (`@fontsource/inter` `inter-latin-700-normal.woff`, SIL OFL) with `opentype.js`, so the page needs no Inter. A render of the outlined file matched the original SVG rendered with Inter loaded, with 0 differing pixels at 768 px (pixelmatch, threshold 0.1). The apple touch icon is the same mark on a full-bleed `#0F1E3D` square, because iOS rounds the corners itself.
+
 ## Image provenance
 
 All three are illustrations made with `generate_image` (gpt-image-2 via openai-codex) on 2026-11-25. None is a screenshot or real data. Originals are in `src/img/`; `scripts/images.sh` derives the shipped AVIF and WebP files.
@@ -19,7 +25,7 @@ All three are illustrations made with `generate_image` (gpt-image-2 via openai-c
 | 3 | Every step is shown; step-by-step table and formula narrative | README "Calculation transparency"; `en/common.json` | Open any calculator | OK |
 | 4 | Numbers stay in the browser; no backend; no NIK, names or addresses | README intro; app home hero and privacy text in `en/common.json` | README; no backend code in `open-pajak-v1/` (`worker/_worker.js` is 597 bytes, not read for logic) | OK, wording follows the README |
 | 5 | Receipts in local storage; Excel and PDF export; bulk Excel upload offline | README Recent Highlights; `open-pajak-v1/src/lib/storage/receipts.ts` | README | OK |
-| 6 | Ledger figures | `scripts/scenarios.ts` runs `open-pajak-v1/src/lib/tax/pph21.ts`; output `data/pph21-scenarios.json` (15 cases); no figure typed by hand | `bun scripts/scenarios.ts` | OK |
+| 6 | Ledger figures, both languages | `scripts/scenarios.ts` runs `open-pajak-v1/src/lib/tax/pph21.ts` once per locale; output `data/pph21-scenarios.en.json` and `data/pph21-scenarios.id.json` (15 cases each, identical figures); the build only formats them (`Rp 15.000.000` on `/`, `Rp 15,000,000` on `/en/`); no figure typed by hand | `bun scripts/scenarios.ts` | OK |
 | 7 | Ledger inputs: employee, TER, 12 months, no bonus, pension or zakat; TER category follows PTKP status | `PPh21Input`; `PTKP_TER_MAPPING` in `src/routes/pph21.tsx` | Same files | OK |
 | 8 | Default case Rp 15,000,000 with K/0 | `createSampleForm` in `src/routes/pph21.tsx` | Same file | OK |
 | 9 | TK/0, K/0, K/2 descriptions (single, married, dependants) | PTKP code naming in `src/lib/tax/constants.ts` | Same file | OK |
@@ -29,3 +35,7 @@ All three are illustrations made with `generate_image` (gpt-image-2 via openai-c
 | 13 | Maintainer and credited contributors | README "Community & Contributors" | README | OK |
 | 14 | Disclaimer sentence | README License section, verbatim | README | OK |
 | 15 | Not claimed: tests, traffic numbers, licence offer, rate legal bases | PLAYBOOK §2; card `open-pajak.md` | n/a | Left out on purpose |
+| 16 | Indonesian page copy: same facts as claims 1 to 14, written in Indonesian | Tax names and terms from the app's `open-pajak-v1/src/i18n/locales/id/common.json`: calculator card titles and descriptions (`home.calculatorList.cards`), "Pegawai tetap", "Tarif Efektif (TER)", "Status PTKP", "bukti", "Penghasilan netto", row labels in the ledger (written by the app in `id`) | Same file | OK |
+| 17 | Indonesian "Tabel ini untuk satu pegawai tetap ... dua belas masa tanpa bonus" | Same inputs as claim 7 (`PPh21Input`: `subjectType: pegawai_tetap`, `monthsPaid: 12`, `bonusAnnual: 0`) | `scripts/scenarios.ts` | OK |
+| 18 | Indonesian disclaimer "Konsultasikan dengan konsultan pajak profesional ..." | Translation of the README License sentence of claim 14 | README | OK, translated |
+| 19 | Search description, JSON-LD (`WebApplication`: category, OS, `sameAs` repo, author) | `build/v3/open-pajak/SEO.md`; repository URL; maintainer name from the README | Page source | OK, no rating, offer or version claimed |

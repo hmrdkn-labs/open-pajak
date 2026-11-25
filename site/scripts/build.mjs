@@ -210,7 +210,7 @@ for (const [lang, path] of PAGES) {
 }
 
 // ---- static files -------------------------------------------------------------------------------
-for (const f of ["favicon.svg", "robots.txt", "_headers", "_redirects"]) copyFileSync(join(src, f), join(pub, f));
+for (const f of ["favicon.svg", "robots.txt", "_headers", "_redirects", "7bcad09f58489a1d63b305aac91763e2.txt"]) copyFileSync(join(src, f), join(pub, f));
 writeFileSync(join(pub, "404.html"), read(join(src, "404.html")).replace("{{css}}", cssUrl));
 const altLinks = [...PAGES.map(([l, p]) => [l, p]), ["x-default", "/en/"]]
   .map(([l, p]) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${ORIGIN}${p}"/>`).join("\n");

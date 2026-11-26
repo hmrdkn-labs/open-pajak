@@ -1,3 +1,4 @@
+import i18n from '../../i18n/config'
 import {
   applyRate,
   getPTKP,
@@ -9,7 +10,6 @@ import {
 } from './utils'
 import { PASAL17_LAYERS } from './constants'
 import type { TaxBreakdownRow, TaxResult } from './types'
-import i18n from '../../i18n/config'
 
 export type PPh21SubjectType =
   | 'pegawai_tetap'
@@ -379,10 +379,10 @@ function formatPercentLabel(rateBps: number) {
   return percent % 1 === 0 ? `${percent.toFixed(0)}%` : `${percent.toFixed(2)}%`
 }
 
-function buildPasal17TierRows(pkpRounded: number): TaxBreakdownRow[] {
+function buildPasal17TierRows(pkpRounded: number): Array<TaxBreakdownRow> {
   let remaining = pkpRounded
   let lowerBound = 0
-  const layers: TaxBreakdownRow[] = []
+  const layers: Array<TaxBreakdownRow> = []
   PASAL17_LAYERS.forEach((layer, index) => {
     if (remaining <= 0) {
       return
@@ -435,7 +435,7 @@ function buildWaterfallTerRows({
   nettoSetahun: number
   ptkp: number
   pkpRounded: number
-  pasal17Rows: TaxBreakdownRow[]
+  pasal17Rows: Array<TaxBreakdownRow>
   pajakSetahun: number
   terRateBps: number
   masaTax: number
@@ -445,10 +445,10 @@ function buildWaterfallTerRows({
   overpaid: number
   takeHomeAnnual: number
   takeHomePerMasa: number
-}): TaxBreakdownRow[] {
+}): Array<TaxBreakdownRow> {
   const t = (key: string, fallback: string, options?: Record<string, unknown>) =>
     i18n.t(key, { defaultValue: fallback, ...options })
-  const rows: TaxBreakdownRow[] = []
+  const rows: Array<TaxBreakdownRow> = []
   const totalPengurang = biayaJabatan + iuranTahun + zakat
 
   rows.push({ label: t('pph21Waterfall.groups.gross', 'A. Penghasilan Bruto (Gross)'), variant: 'group' })
@@ -589,7 +589,7 @@ function calculatePph26(input: PPh21Input): TaxResult {
   const foreignRatePercent = input.foreignTaxRate ?? 20
   const rateBps = Math.max(0, Math.round(foreignRatePercent * 100))
   const tax = applyRate(bruto, rateBps)
-  const rows: TaxBreakdownRow[] = [
+  const rows: Array<TaxBreakdownRow> = [
     { label: 'A. Penghasilan bruto WPLN', variant: 'group' },
     {
       label: 'Honorarium/jasa (setahun)',

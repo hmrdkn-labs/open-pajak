@@ -412,11 +412,12 @@ export function flatRate(
   id: string,
   runEngine: (key: string, base: number) => number,
   keys: ReadonlyArray<{ key: string; bps: number }>,
+  rounding: Rounding = 'nearest',
 ): Report {
   const rows = keys.flatMap((k) => brutoGrid(Math.ceil(10_000 / keys.length)).map((base) => ({ ...k, base })))
   return run(id, rows, (c) => {
     const got = runEngine(c.key, c.base)
-    const want = rate(c.base, c.bps, 'nearest')
+    const want = rate(c.base, c.bps, rounding)
     return got === want ? null : `${c.key} base=${c.base} engine=${got} oracle=${want} (rate ${c.bps / 100}%)`
   })
 }

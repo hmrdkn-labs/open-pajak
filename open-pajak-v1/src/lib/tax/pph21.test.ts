@@ -156,7 +156,7 @@ describe('PPh 21 properties', () => {
 
   // COUNTEREXAMPLE, see RESULTS.md PPH21-DECEMBER-NEGATIVE: the engine clamps the December adjustment at 0
   // and keeps the excess withheld inside totalTax; the guide (p.66) refunds it.
-  counterexample('when Jan..Nov withheld exceeds annual tax, the year total is the annual tax (excess refunded)', () => decemberNegative(engine), 1)
+  counterexample('when Jan..Nov withheld exceeds annual tax, the year total is the annual tax (excess refunded)', () => decemberNegative(engine))
 
   // COUNTEREXAMPLE, see RESULTS.md PPH21-PARTIAL-YEAR: no Dec reconciliation for fewer than 12 masa, and biaya jabatan capped at 6 jt instead of 500 rb x masa.
   counterexample('pegawai tetap with fewer than 12 masa reconciles to annual tax (p.65-66)', () => partialYear(engine))

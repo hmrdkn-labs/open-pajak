@@ -1,6 +1,6 @@
 # Bounded model check of the tax engines: results
 
-Run: `bun run test` from `open-pajak-v1/`, seed `20261126` (`domain.ts`). 83 tests, 6 files, about 25 s.
+Run: `bun run test` from `open-pajak-v1/`, seed `20261126` (`domain.ts`). 86 tests, 6 files, about 25 s.
 Every run prints one `[check] <ID> cases=N violations=V first: ...` line per property.
 
 What this verifies: the **engines** in `src/lib/tax/*.ts`, as pure functions, against an oracle
@@ -90,7 +90,7 @@ Documents read: UU 7/2021 Pasal 7(1) (11% from 1 Apr 2022, 12% "paling lambat 1 
 
 | ID | Result | Note |
 |---|---|---|
-| PPN-RATE-UI-YEARS | VERIFIED, with scope | 2022-2025 map to 11, 11, 11, 12% on the full DPP. Scope: 2022 is 10% until 31 Mar 2022 (UU 42/2009 Pasal 7(1)), the engine is year-granular. 2025 at 12% on the full DPP matches PMK 131/2024 Pasal 2 (luxury goods) only; for Pasal 3 goods the effective rate is 11% of the price (open question below) |
+| PPN-RATE-UI-YEARS | VERIFIED, with scope | 2022-2025 map to 11, 11, 11, 12% on the full DPP. Scope: 2022 is 10% until 31 Mar 2022 (UU 42/2009 Pasal 7(1)), the engine is year-granular. 2025 at 12% on the full DPP matches PMK 131/2024 Pasal 2 (luxury goods) only; for Pasal 3 supplies the effective rate is 11% of the price (open question below) |
 | PPN-RATE-2026 | COUNTEREXAMPLE (9.889) | **What happens for 2026:** `PPN_RATES_PER_YEAR` has no `'2026'` key; `ppn.ts:28` falls back to the `'2024'` entry, 11%. The UI offers only 2022-2025 and defaults to `'2024'` (`routes/ppn.tsx:27`). UU 7/2021 Pasal 7(1) huruf b and PMK 131/2024 Pasal 2(2), 3(2) give 12% (no end date in PMK 131/2024). Year 2026 base 13: engine 1, oracle 2 |
 | PPN-DPP-PLUS-PPN-IS-TOTAL | VERIFIED | DPP + PPN = total; inclusive total = entered price |
 | PPN-ROUND-TRIP | VERIFIED | exclusive then inclusive returns the DPP within Rp1 |
@@ -100,8 +100,9 @@ Documents read: UU 7/2021 Pasal 7(1) (11% from 1 Apr 2022, 12% "paling lambat 1 
 | PPNBM-ROUNDING, PPNBM-CUSTOM-RATE | VERIFIED | arithmetic at the engine's own rates; custom percent against the oracle |
 | PPNBM-NEGATIVE | COUNTEREXAMPLE (9.979) | `ppnbm.ts` does not clamp: kendaraanMewah DPP -8 gives tax -1 |
 
-**OPEN TAX QUESTION, not decided here:** PMK 131/2024 DPP nilai lain 11/12. The read text says the 12% rate applies to the full price only for luxury goods
-(Pasal 2); for every other BKP/JKP it applies to 11/12 of the price (Pasal 3), i.e. 11% effective. The engine has no DPP-nilai-lain switch and no luxury/non-luxury input.
+**OPEN TAX QUESTION, not decided here:** PMK 131/2024 DPP nilai lain 11/12. The read text applies 12% to the full price for luxury goods
+(Pasal 2) and 12% to 11/12 of the price (11% effective) for the BKP/JKP of Pasal 3, which is not a comprehensive rule: Pasal 4 excludes supplies that use a separately regulated
+nilai lain or besaran tertentu, and Pasal 5 has a January 2025 transition for final-consumer luxury goods (1 Jan-31 Jan 2025 on 11/12, from 1 Feb 2025 Pasal 2(2)). The engine has no DPP-nilai-lain switch and no luxury/non-luxury input.
 Whether the 2025/2026 default should be 12% on DPP, 11% effective, or a user choice is for Dika. The tests compare against the 12% tarif and mark 2026 as a counterexample;
 they do not claim that is the right default. PMK 131/2024 was read as enacted; the later PMK 11/2025 was not read.
 
@@ -109,9 +110,10 @@ they do not claim that is the right default. PMK 131/2024 was read as enacted; t
 
 | ID | Result | Source / note |
 |---|---|---|
-| PPH22-ORACLE-RATES | VERIFIED (sourced rows only) | impor 2,5%: PMK 34/2017 Pasal 2(1) a.1.d (with API; without API 7,5% huruf e, not modelled). bumn 1,5%: Pasal 2(1) b (buyers of Pasal 1(1) b-e) |
+| PPH22-ORACLE-RATES | VERIFIED as engine arithmetic (sourced rates, nearest-rupiah rounding as the engine does); **not** a regulatory verification of the amount, see next row | impor 2,5%: PMK 34/2017 Pasal 2(1) a.1.d (with API; without API 7,5% huruf e, not modelled). bumn 1,5%: Pasal 2(1) b (buyers of Pasal 1(1) b-e) |
+| PPH22-ROUNDING-THOUSAND | COUNTEREXAMPLE (9.684 of 10.000) | PMK 34/PMK.010/2017 Pasal 2(5) (PDF p.10): the levy is "dibulatkan ke bawah dalam ribuan rupiah penuh". The engine rounds to the nearest rupiah. Nilai impor 1.234.567 at 2,5%: engine 30.864, rule 30.000. Oracle `rate(..., 'thousand')`; positive control: an engine flooring to thousands has 0 violations. PMK 34/2017 read as enacted; no amending document was read |
 | PPH22 migas, lainnya | UNVERIFIED | `migas` 2%: Pasal 2(1) c lists 0,25% and 0,3% for fuel, gas, lubricants, no 2% row found. `lainnya` 1,5%: names no transaction. Not asserted |
-| PPH22-ROUNDING, PPH22-DPP, PPH22-NON-POSITIVE | VERIFIED | arithmetic: nearest-rupiah rounding, DPP = max(0, value + other - deduction), non-positive base gives 0 |
+| PPH22-ROUNDING, PPH22-DPP, PPH22-NON-POSITIVE | VERIFIED (engine arithmetic only) | nearest-rupiah rounding as the engine does (not the Pasal 2(5) rule), DPP = max(0, value + other - deduction), non-positive base gives 0 |
 | PPH23-ORACLE-RATES | VERIFIED (sourced rows only) | UU 36/2008 Pasal 23(1): jasaTeknik 2% (huruf c angka 2), sewaAlat 2% (c angka 1), dividen 15% (a angka 1), bunga 15% (a angka 2) |
 | PPH23-KONSULTAN | COUNTEREXAMPLE (9.974) | `constants.ts` 4%; UU 36/2008 Pasal 23(1) huruf c angka 2 lists "jasa konsultan" at 2%. Base 13: engine 1, 2% gives 0. Read as enacted; later amendments not checked |
 | PPH23-ROUNDING, FINAL-FLAG, NON-POSITIVE | VERIFIED | `isFinal` only changes the note |
@@ -126,6 +128,14 @@ Not modelled by the engines (documented gaps, not counterexamples of a rate):
 - PPh 22 import without API (7,5%), other import classes (10%, 0,5%).
 - The lama scheme deducts zakat too, though the guide's lama formula (p.61) lists none; the checks use zero zakat in lama.
 - Sub-rupiah rounding of biaya jabatan (5% of an odd bruto): the guide is silent; avoided by snapping inputs.
+
+## Coverage narrowed by orchestrator 2026-11-26, needs a later brief
+
+Exactly this coverage was not completed. The orchestrator approved leaving it unverified; it is not a pass:
+
+- every PPnBM goods rate (`kendaraanMewah` 20%, `perhiasan` 30%, `kapalPesiar` 75%, `elektronikPremium` 25%): only the UU 42/2009 Pasal 8(1) range of 10%-200% is asserted; the PMK under Pasal 8(3) was not read;
+- PPh 22 `migas` (2%) and `lainnya` (1,5%): not asserted;
+- PPh 4(2) `restoran` (5%): not asserted.
 
 ## Negative controls
 
@@ -147,4 +157,4 @@ Each mutant runs the same property as the baseline, on a mutated module loaded w
 | PPh 4(2) tax truncated | ROUNDING | 4.784 |
 | PPh 4(2) umkmFinal rate 1% | ORACLE-RATES | 4.909 |
 
-All 13 rejected. The weakest is the TER row shift (3 violations): only categories A statuses hit the shifted row, and only at ceiling+1.
+All 13 rejected. Positive control: an engine rounding PPh 22 down to thousands satisfies PPH22-ROUNDING-THOUSAND (0 violations), so the thousand oracle is implemented as the regulation states. The weakest is the TER row shift (3 violations): only categories A statuses hit the shifted row, and only at ceiling+1.

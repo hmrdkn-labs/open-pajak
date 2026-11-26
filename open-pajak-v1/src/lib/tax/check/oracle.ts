@@ -123,11 +123,13 @@ export function harianRateBps(bruto: number): number {
   throw new Error('harian rate is only defined up to the threshold')
 }
 
-export type Rounding = 'floor' | 'nearest'
+/** 'thousand' = rounded down to full thousands of rupiah: PMK 34/PMK.010/2017 Pasal 2(5), PPh 22 only. */
+export type Rounding = 'floor' | 'nearest' | 'thousand'
 
 /** bruto x bps / 10_000 in exact integer arithmetic. */
 export function rate(bruto: number, bps: number, rounding: Rounding): number {
   const numerator = BigInt(bruto) * BigInt(bps)
+  if (rounding === 'thousand') return Number(numerator / 10_000_000n) * 1000
   return Number(rounding === 'floor' ? numerator / 10_000n : (numerator + 5_000n) / 10_000n)
 }
 
@@ -217,8 +219,8 @@ export const PPN_SOURCE = `${UU_HPP} Pasal 7(1); ${PMK_131} Pasal 2-3`
 
 /** PPh 22 (PMK 34/PMK.010/2017 as enacted; amendments not checked). */
 export const PPH22_ORACLE: Readonly<Record<string, RateRow>> = {
-  impor: { bps: 250, confidence: 'sourced', source: `${PMK_34} Pasal 2(1) huruf a angka 1 huruf d`, note: '2,5% of nilai impor with API. Without API 7,5% (huruf e); some goods 10%, 7,5%, 0,5% (huruf a-c). The engine has only the 2,5% row' },
-  bumn: { bps: 150, confidence: 'sourced', source: `${PMK_34} Pasal 2(1) huruf b`, note: '1,5% of purchase price excl. PPN, for the buyers listed in Pasal 1(1) huruf b-e' },
+  impor: { bps: 250, confidence: 'sourced', source: `${PMK_34} Pasal 2(1) huruf a angka 1 huruf d; rounding Pasal 2(5)`, note: '2,5% of nilai impor with API; the levy is rounded down to full thousands of rupiah (Pasal 2(5)). Without API 7,5% (huruf e); some goods 10%, 7,5%, 0,5% (huruf a-c). The engine has only the 2,5% row' },
+  bumn: { bps: 150, confidence: 'sourced', source: `${PMK_34} Pasal 2(1) huruf b; rounding Pasal 2(5)`, note: '1,5% of purchase price excl. PPN, for the buyers listed in Pasal 1(1) huruf b-e' },
   migas: { bps: 200, confidence: 'unverified', source: `${PMK_34} Pasal 2(1) huruf c`, note: 'Pasal 2(1) huruf c lists 0,25% and 0,3% for fuel, gas and lubricants; no 2% row was found' },
   lainnya: { bps: 150, confidence: 'unverified', source: `${PMK_34} Pasal 2(1)`, note: '"lainnya" names no transaction type; no single rate can be pinned' },
 }

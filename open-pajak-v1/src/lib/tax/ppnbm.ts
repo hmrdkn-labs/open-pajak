@@ -1,7 +1,7 @@
+import i18n from '../../i18n/config'
 import { PPNBM_RATES } from './constants'
 import { applyRate, rateBpsToPercent } from './utils'
 import type { TaxResult } from './types'
-import i18n from '../../i18n/config'
 
 export type PpnbmGoods =
   | 'kendaraanMewah'

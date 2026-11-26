@@ -3,7 +3,7 @@ import { PPH22_RATES } from './constants'
 import { calculatePph22 } from './pph22'
 import { PPH22_ORACLE, rate  } from './check/oracle'
 import { SEED, brutoGrid, int, mulberry32 } from './check/domain'
-import { expectClean, flatRate, nonPositiveBase, run } from './check/properties'
+import { counterexample, expectClean, flatRate, nonPositiveBase, run } from './check/properties'
 import type { PPh22TransactionType } from './pph22'
 import type * as UtilsModule from './utils'
 import type * as ConstantsModule from './constants'
@@ -19,12 +19,18 @@ const sourced = Object.entries(PPH22_ORACLE).filter(([, row]) => row.confidence 
 const oracleRates = sourced.map(([key, row]) => ({ key, bps: row.bps }))
 
 describe('PPh 22', () => {
-  test('sourced rows equal the oracle; unverified rows are skipped', () => {
+  // Engine-arithmetic characterization: the sourced rates, rounded to the nearest rupiah as the engine does.
+  // This is NOT regulatory verification of the amount: Pasal 2(5) rounds down to thousands (counterexample below).
+  test('sourced rates equal the oracle, at the engine rounding; unverified rows are skipped', () => {
     for (const [key, row] of sourced) expect(PPH22_RATES[key as PPh22TransactionType], `${key}: ${row.note}`).toBe(row.bps)
     expectClean(flatRate('PPH22-ORACLE-RATES', run22(calculatePph22), oracleRates))
   })
 
-  test('tax = DPP x rate rounded to the nearest rupiah, for every type', () => {
+  // COUNTEREXAMPLE, see RESULTS.md PPH22-ROUNDING-THOUSAND: PMK 34/PMK.010/2017 Pasal 2(5) "dibulatkan ke bawah dalam
+  // ribuan rupiah penuh"; the engine rounds to the nearest rupiah (nilai impor 1.234.567 at 2,5%: engine 30.864, rule 30.000).
+  counterexample('PPh 22 levy is rounded down to full thousands of rupiah', () => flatRate('PPH22-ROUNDING-THOUSAND', run22(calculatePph22), oracleRates, 'thousand'))
+
+  test('tax = DPP x rate rounded to the nearest rupiah (engine characterization), for every type', () => {
     expectClean(flatRate('PPH22-ROUNDING', run22(calculatePph22), types.map((key) => ({ key, bps: PPH22_RATES[key] }))))
   })
 
@@ -66,6 +72,18 @@ describe('negative controls: mutants must be rejected', () => {
     const report = flatRate('PPH22-ROUNDING', run22(mutant), types.map((key) => ({ key, bps: PPH22_RATES[key] })))
     console.info(`[check] MUTANT-PPH22-TRUNCATE violations=${report.violations} first: ${report.first}`)
     expect(report.violations).toBeGreaterThan(0)
+  })
+
+  test('positive control: an engine that floors to thousands satisfies the thousand oracle', async () => {
+    const floorThousand = await load(() =>
+      vi.doMock('./utils', async (importOriginal) => ({
+        ...(await importOriginal<typeof UtilsModule>()),
+        applyRate: (amount: number, bps: number) => Math.floor(Number((BigInt(Math.round(amount)) * BigInt(bps)) / 10_000n) / 1000) * 1000,
+      })),
+    )
+    const report = flatRate('PPH22-ROUNDING-THOUSAND', run22(floorThousand), oracleRates, 'thousand')
+    console.info(`[check] CONTROL-PPH22-THOUSAND violations=${report.violations}`)
+    expect(report.violations).toBe(0)
   })
 
   test('mutant 2: impor rate changed to 2,0%', async () => {

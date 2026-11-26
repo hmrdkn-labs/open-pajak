@@ -4,10 +4,11 @@ import {
   getTerBulananRate,
   getTerHarianRate,
   hitungPajakPasal17,
+  hitungPph21Harian,
   rateBpsToPercent,
   roundDownToThousand,
 } from './utils'
-import { PASAL17_LAYERS } from './constants'
+import { PASAL17_LAYERS, TER_HARIAN_PASAL17_THRESHOLD } from './constants'
 import type { TaxBreakdownRow, TaxResult } from './types'
 import i18n from '../../i18n/config'
 
@@ -283,25 +284,31 @@ function calculatePensiunan(input: PPh21Input): TaxResult {
 function calculatePegawaiTidakTetap(input: PPh21Input): TaxResult {
   const months = clampMonths(input.monthsPaid)
   if (input.isDailyWorker) {
-    const terRateBps = getTerHarianRate(input.terCategory, input.brutoMonthly)
-    const taxPerDay = applyRate(input.brutoMonthly, terRateBps)
-    const total = taxPerDay * months
-    return {
-      totalTax: total,
-      breakdown: [
-        { label: 'Penghasilan Harian', variant: 'section' },
-        { label: 'Upah harian', value: input.brutoMonthly },
-        {
-          label: 'Tarif TER harian',
-          value: rateBpsToPercent(terRateBps),
-          valueType: 'percent',
-        },
-        { label: 'PPh 21 per hari', value: taxPerDay },
-        { label: 'Total masa', value: total, variant: 'total' },
-      ],
-    }
+    const dailyWage = input.brutoMonthly
+      const taxPerDay = hitungPph21Harian(dailyWage)
+        const total = taxPerDay * months
+          const rows: Array<TaxBreakdownRow> = [
+            { label: 'Penghasilan Harian', variant: 'section' },
+            { label: 'Upah harian', value: dailyWage },
+    ]
+            if (dailyWage > TER_HARIAN_PASAL17_THRESHOLD) {
+              rows.push({
+                label: 'DPP (50% bruto harian)',
+                value: applyRate(dailyWage, FIFTY_PERCENT_BPS),
+                note: 'Tarif Pasal 17',
+              })
+            } else {
+              rows.push({
+                label: 'Tarif TER harian',
+                value: rateBpsToPercent(getTerHarianRate(dailyWage)),
+                valueType: 'percent',
+              })
+            }
+    rows.push({ label: 'PPh 21 per hari', value: taxPerDay })
+      rows.push({ label: 'Total masa', value: total, variant: 'total' })
+        return { totalTax: total, breakdown: rows }
   }
-
+  
   if (input.brutoMonthly <= 2500000) {
     const terRateBps = getTerBulananRate(input.terCategory, input.brutoMonthly)
     const masaTax = applyRate(input.brutoMonthly, terRateBps)

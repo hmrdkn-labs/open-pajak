@@ -157,26 +157,16 @@ export const TER_BULANAN_TABLE: Record<
   ],
 }
 
-export const TER_HARIAN_TABLE: Record<
-  string,
-  Array<{ ceiling: number; rateBps: number }>
-> = {
-  A: [
-    { ceiling: 750000, rateBps: toBps(0.0025) },
-    { ceiling: 2500000, rateBps: toBps(0.015) },
-    { ceiling: Number.POSITIVE_INFINITY, rateBps: toBps(0.02) },
-  ],
-  B: [
-    { ceiling: 750000, rateBps: toBps(0.0025) },
-    { ceiling: 2500000, rateBps: toBps(0.0125) },
-    { ceiling: Number.POSITIVE_INFINITY, rateBps: toBps(0.0175) },
-  ],
-  C: [
-    { ceiling: 750000, rateBps: toBps(0.0025) },
-    { ceiling: 2500000, rateBps: toBps(0.01) },
-    { ceiling: Number.POSITIVE_INFINITY, rateBps: toBps(0.015) },
-  ],
-}
+// TER Harian (PP 58/2023 Lampiran dan PMK 168/2023) tanpa kategori A/B/C:
+// penghasilan bruto harian s.d. Rp450.000 tidak dikenai pajak, Rp450.001–
+// Rp2.500.000 dikenai 0,5%, dan di atas Rp2.500.000 dikenai tarif Pasal 17
+// atas 50% penghasilan bruto harian (lihat hitungPph21Harian di utils.ts).
+export const TER_HARIAN_TABLE: Array<{ ceiling: number; rateBps: number }> = [
+  { ceiling: 450_000, rateBps: toBps(0) },
+  { ceiling: 2_500_000, rateBps: toBps(0.005) },
+]
+
+export const TER_HARIAN_PASAL17_THRESHOLD = 2_500_000
 
 export const PPH22_RATES = {
   impor: toBps(0.025),

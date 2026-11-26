@@ -1,6 +1,6 @@
 // Property checks. Each runs a generator of cases against an engine function and an oracle, and returns
 // a Report. Engines are passed in so that the negative controls can run the same checks on mutants.
-import { expect } from 'vitest'
+import { expect, test } from 'vitest'
 import { GRID_SIZE, SEED, STATUSES, brutoGrid, int, mulberry32, rangeGrid, snappedGrid } from './domain'
 import {
   HARIAN_PASAL17_THRESHOLD,
@@ -165,7 +165,7 @@ export function december(engine: Pph21Engine, rounding: Rounding): Report {
 
 /** When annual tax is below what Jan..Nov already withheld, the guide refunds the excess (p.66 "lebih dipotong"). */
 export function decemberNegative(engine: Pph21Engine): Report {
-  const rows = annualCases(true, 3).filter((c) => annualOf(c) < 11 * rate(c.bruto, terRateBps(TER_CATEGORY[c.status], c.bruto), 'nearest'))
+  const rows = annualCases(true, 3, 5200).filter((c) => annualOf(c) < 11 * rate(c.bruto, terRateBps(TER_CATEGORY[c.status], c.bruto), 'nearest'))
   return run('PPH21-DECEMBER-NEGATIVE', rows, (c) => {
     const got = engine(pphInput({ ptkpStatus: c.status, scheme: 'ter', brutoMonthly: c.bruto, bonusAnnual: c.bonus, pensionContribution: c.iuran, zakatOrDonation: c.zakat })).totalTax
     const want = annualOf(c)
@@ -435,4 +435,28 @@ export function expectClean(report: Report, minCases = 10_000): void {
   console.info(`[check] ${report.id} cases=${report.cases} violations=${report.violations}${report.first ? ` first: ${report.first}` : ''}`)
   expect(report.cases).toBeGreaterThanOrEqual(minCases)
   expect(report.violations, report.first ?? '').toBe(0)
+}
+
+/** Run `make` once, however many tests ask for its report. */
+export function lazy<T>(make: () => T): () => T {
+  let made: { value: T } | undefined
+  return () => (made ??= { value: make() }).value
+}
+
+/**
+ * A known counterexample as two tests. The ordinary test generates the domain, runs the engine and asserts the
+ * case count, so a vacuous or broken run is red. Only the second test is test.fails, and it asserts nothing but
+ * "no tax violation" on the report the first test already validated.
+ */
+export function counterexample(title: string, make: () => Report, minCases = 10_000): void {
+  const get = lazy(make)
+  test(`${title} [domain >= ${minCases} cases]`, () => {
+    const report = get()
+    console.info(`[check] ${report.id} cases=${report.cases} violations=${report.violations}${report.first ? ` first: ${report.first}` : ''}`)
+    expect(report.cases).toBeGreaterThanOrEqual(minCases)
+  })
+  test.fails(title, () => {
+    const report = get()
+    expect(report.violations, report.first ?? '').toBe(0)
+  })
 }

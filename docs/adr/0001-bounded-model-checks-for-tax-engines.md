@@ -20,13 +20,14 @@ Check every engine with bounded model checks that run as Vitest tests (`bun run 
 - Negative controls: each engine file has two mutants (shifted TER row, missing floor, wrong rate, truncated
   rounding) loaded with `vi.doMock`. A mutant that passes means the oracle is too weak and must be strengthened.
 - Findings that disagree with the sources are kept as `test.fails` with a pointer to
-  `src/lib/tax/check/RESULTS.md`, so the suite stays green and honest. Fixing an engine means removing its
+  `src/lib/tax/check/RESULTS.md`, so the suite stays green and honest. Domain generation and the case-count assertion
+  run in an ordinary test; `test.fails` asserts only "zero tax violations" on that report. Fixing an engine means removing its
   `test.fails` in the same change, after a tax sign-off.
 - The checks cover the engines only, not the UI wiring.
 
 ## Consequences
 
 - Any change to a tax number or rounding rule must keep the oracle in agreement or update it with a cited source.
-- Oracle rows from regulations (PPN, PPh 22/23/4(2)) carry a confidence flag; rows marked `dika-to-confirm`
-  need tax review before an engine fix.
+- Oracle rows from regulations (PPN, PPh 22/23/4(2), PPnBM) cite the document URL and article they were read from.
+  A row without such a source is `unverified`: it is reported in RESULTS.md and never asserted.
 - The suite takes about 25 s. CI runs it on every push and pull request (`.github/workflows/test.yml`).

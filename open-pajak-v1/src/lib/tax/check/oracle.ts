@@ -177,42 +177,84 @@ export function annualPensiunan(a: Annual): number {
   return pasal17(pkp(neto, PTKP[a.status]))
 }
 
-// ---- PPN / PPnBM / PPh 22 / 23 / 4(2): rates from regulations, not from the PDF ----
-// [INFERENCE] Article numbers below are from the checker's knowledge of the regulations; the repo's
-// own docs (design.md, tax-formulas-mapping.md) carry no rate values. Dika signs off on each row.
+// ---- PPN / PPnBM / PPh 22 / 23 / 4(2): rates from official documents, not from the PDF ----
+// Every row cites the document and article it was read from (all fetched and read on 2026-11-26).
+// 'sourced' = the text of the cited document states the rate. 'unverified' = no document read supports one flat
+// rate; such rows are reported in RESULTS.md and never asserted. Where a document was read as enacted, later
+// amendments were NOT checked; each row says so in `note`.
 
-/** UU 7/2021 (HPP) amending Pasal 7 UU PPN: 11% from 1 Apr 2022, 12% from 1 Jan 2025. Whole-year view. */
+export type Confidence = 'sourced' | 'unverified'
+export interface RateRow {
+  bps: number
+  confidence: Confidence
+  source: string
+  note: string
+}
+
+const UU_HPP = 'UU 7/2021 (HPP), https://peraturan.bpk.go.id/Download/178620/UU%20Nomor%207%20Tahun%202021.pdf'
+const PMK_131 = 'PMK 131/2024, https://peraturan.bpk.go.id/Download/372221/2024pmkeuangan131.pdf'
+const PMK_34 = 'PMK 34/PMK.010/2017, https://peraturan.bpk.go.id/Download/103561/PMK%20Nomor%2034%20Tahun%202017.pdf'
+const UU_PPH = 'UU 36/2008 (PPh), https://peraturan.bpk.go.id/Download/29283/UU%20Nomor%2036%20Tahun%202008.pdf'
+
+/**
+ * PPN rate by tax year.
+ * 2022: UU 42/2009 Pasal 7(1) 10% until 31 Mar 2022 (https://peraturan.bpk.go.id/Download/28116/UU%20Nomor%2042%20Tahun%202009.pdf),
+ *       then 11% (UU HPP Pasal 7(1) huruf a, as inserted by Bab IV angka 2); a year-granular engine cannot represent both.
+ * 2023-2024: 11% (UU HPP Pasal 7(1) huruf a).
+ * 2025 and 2026: tarif 12% (UU HPP Pasal 7(1) huruf b "paling lambat 1 Januari 2025"; PMK 131/2024 Pasal 2(2) and 3(2)).
+ * SCOPE: PMK 131/2024 Pasal 2(2)-(3) applies 12% to the full harga jual only for luxury goods (BKP mewah). Pasal 3(2)-(3)
+ * applies 12% to DPP nilai lain = 11/12 of harga jual for all other BKP/JKP, i.e. 11% of the price. The engine multiplies
+ * the full DPP, which matches Pasal 2 only. Which one the calculator should default to is an OPEN TAX QUESTION, not decided here.
+ */
 export const PPN_BPS_BY_YEAR: Readonly<Record<string, number>> = {
-  '2022': 1100, // 1 Jan-31 Mar 2022 was still 10%; a year-granular engine cannot represent that
+  '2022': 1100,
   '2023': 1100,
   '2024': 1100,
   '2025': 1200,
-  '2026': 1200, // statutory rate. PMK 131/2024 "DPP nilai lain" 11/12 is an OPEN QUESTION, not decided here
+  '2026': 1200,
 }
+export const PPN_SOURCE = `${UU_HPP} Pasal 7(1); ${PMK_131} Pasal 2-3`
 
-export type Confidence = 'confirmed' | 'dika-to-confirm'
-
-/** PPh 22 (PMK 34/PMK.010/2017 and later): only rows with a single flat rate can be checked. */
-export const PPH22_ORACLE: Readonly<Record<string, { bps: number; confidence: Confidence; note: string }>> = {
-  impor: { bps: 250, confidence: 'confirmed', note: '2,5% for importers with API; 7,5% without API is not modelled' },
-  bumn: { bps: 150, confidence: 'confirmed', note: '1,5% of purchase price, treasurer/BUMN purchases' },
+/** PPh 22 (PMK 34/PMK.010/2017 as enacted; amendments not checked). */
+export const PPH22_ORACLE: Readonly<Record<string, RateRow>> = {
+  impor: { bps: 250, confidence: 'sourced', source: `${PMK_34} Pasal 2(1) huruf a angka 1 huruf d`, note: '2,5% of nilai impor with API. Without API 7,5% (huruf e); some goods 10%, 7,5%, 0,5% (huruf a-c). The engine has only the 2,5% row' },
+  bumn: { bps: 150, confidence: 'sourced', source: `${PMK_34} Pasal 2(1) huruf b`, note: '1,5% of purchase price excl. PPN, for the buyers listed in Pasal 1(1) huruf b-e' },
+  migas: { bps: 200, confidence: 'unverified', source: `${PMK_34} Pasal 2(1) huruf c`, note: 'Pasal 2(1) huruf c lists 0,25% and 0,3% for fuel, gas and lubricants; no 2% row was found' },
+  lainnya: { bps: 150, confidence: 'unverified', source: `${PMK_34} Pasal 2(1)`, note: '"lainnya" names no transaction type; no single rate can be pinned' },
 }
-/** PPh 22 rows the checker cannot pin to one flat rate. */
-export const PPH22_UNVERIFIED = ['migas', 'lainnya'] as const
+/** Higher rate for a withholdee or buyer without NPWP: PMK 34/2017 Pasal 2(4) +100%. The engines have no such input. */
+export const NO_NPWP_SOURCES = [
+  `${PMK_34} Pasal 2(4) (PPh 22)`,
+  `${UU_PPH} Pasal 23 ayat (1a) (PPh 23)`,
+  'PMK 141/PMK.03/2015 Pasal 1(7), https://jdih.kemenkeu.go.id/api/download/FullText/2015/141~PMK.03~2015Per.pdf',
+] as const
 
-/** PPh 23 (UU PPh Pasal 23, PMK 141/PMK.03/2015). */
-export const PPH23_ORACLE: Readonly<Record<string, { bps: number; confidence: Confidence; note: string }>> = {
-  jasaTeknik: { bps: 200, confidence: 'confirmed', note: '2% jasa teknik' },
-  jasaKonsultan: { bps: 200, confidence: 'dika-to-confirm', note: '2% jasa konsultan; engine has 4%' },
-  sewaAlat: { bps: 200, confidence: 'confirmed', note: '2% sewa dan penghasilan lain sehubungan penggunaan harta' },
-  dividen: { bps: 1500, confidence: 'confirmed', note: '15% (UU PPh Pasal 23 ayat 1 huruf a)' },
-  bunga: { bps: 1500, confidence: 'confirmed', note: '15% (UU PPh Pasal 23 ayat 1 huruf a)' },
+/** PPh 23 (UU 36/2008 Pasal 23 ayat (1) as enacted; amendments not checked). */
+export const PPH23_ORACLE: Readonly<Record<string, RateRow>> = {
+  jasaTeknik: { bps: 200, confidence: 'sourced', source: `${UU_PPH} Pasal 23(1) huruf c angka 2`, note: '2% jasa teknik' },
+  jasaKonsultan: { bps: 200, confidence: 'sourced', source: `${UU_PPH} Pasal 23(1) huruf c angka 2`, note: '2% jasa konsultan; the engine has 4%' },
+  sewaAlat: { bps: 200, confidence: 'sourced', source: `${UU_PPH} Pasal 23(1) huruf c angka 1`, note: '2% sewa dan penghasilan lain sehubungan penggunaan harta' },
+  dividen: { bps: 1500, confidence: 'sourced', source: `${UU_PPH} Pasal 23(1) huruf a angka 1`, note: '15% dividend (not for the exclusions in ayat (4))' },
+  bunga: { bps: 1500, confidence: 'sourced', source: `${UU_PPH} Pasal 23(1) huruf a angka 2`, note: '15% bunga' },
 }
 
 /** PPh Final 4(2). */
-export const PPH4_2_ORACLE: Readonly<Record<string, { bps: number; confidence: Confidence; note: string }>> = {
-  sewaTanah: { bps: 1000, confidence: 'confirmed', note: '10% sewa tanah/bangunan (PP 34/2016)' },
-  umkmFinal: { bps: 50, confidence: 'confirmed', note: '0,5% omzet UMKM (PP 55/2022); the Rp500 juta threshold is not modelled' },
+export const PPH4_2_ORACLE: Readonly<Record<string, RateRow>> = {
+  sewaTanah: { bps: 1000, confidence: 'sourced', source: 'PP 34/2017 Pasal 4(1), https://www.pajak.go.id/id/pajak-penghasilan-atas-penghasilan-dari-persewaan-tanah-danatau-bangunan', note: '10% of jumlah bruto nilai persewaan tanah dan/atau bangunan (as enacted)' },
+  umkmFinal: { bps: 50, confidence: 'sourced', source: 'PP 55/2022 Pasal 56(2), https://peraturan.bpk.go.id/Download/284096/PP%20Nomor%2055%20Tahun%202022.pdf', note: '0,5% of peredaran bruto; the time limits and the Rp500 juta threshold of Pasal 57-59 are not modelled' },
+  restoran: { bps: 500, confidence: 'unverified', source: 'none read', note: 'no document read supports a PPh 4(2) rate for restoran' },
 }
-/** Depends on a class (konstruksi) or is not PPh 4(2) at all (restoran). Reported, not asserted. */
-export const PPH4_2_UNVERIFIED = ['konstruksi', 'restoran'] as const
+/**
+ * Jasa konstruksi: the rate depends on the provider class. PP 9/2022 Pasal 3(1) huruf a-g, as it amends PP 51/2008
+ * (https://peraturan.bpk.go.id/Download/193622/PP%20Nomor%209%20Tahun%202022.pdf): 1,75%, 4%, 2,65%, 2,65%, 4%, 3,5%, 6%.
+ * The engine's single 3,5% is the rate of huruf f (konsultansi konstruksi with a sertifikat). The check asserts only that
+ * the engine rate is one of the legal rates; the class cannot be chosen in the engine.
+ */
+export const PP9_2022_KONSTRUKSI_BPS: ReadonlyArray<number> = [175, 265, 350, 400, 600]
+
+/**
+ * PPnBM: UU 42/2009 Pasal 8(1): paling rendah 10% dan paling tinggi 200%
+ * (https://peraturan.bpk.go.id/Download/28116/UU%20Nomor%2042%20Tahun%202009.pdf, as enacted). The rate per goods group is set by
+ * PMK under Pasal 8(3); no such PMK was read, so each goods rate is unverified and only the range is asserted.
+ */
+export const PPNBM_RANGE_BPS = { min: 1000, max: 20000 } as const

@@ -4,6 +4,7 @@ import { calculatePpn } from './ppn'
 import { PPN_BPS_BY_YEAR } from './check/oracle'
 import {
   PPN_UI_YEARS,
+  counterexample,
   expectClean,
   ppnCustomRate,
   ppnNonPositive,
@@ -28,9 +29,7 @@ describe('PPN', () => {
 
   // COUNTEREXAMPLE, see RESULTS.md PPN-2026: PPN_RATES_PER_YEAR has no '2026' key; ppn.ts falls back to 2024 (11%).
   // The statutory rate is 12% from 1 Jan 2025. Whether 11% is right in effect (DPP nilai lain) is not decided here.
-  test.fails('taxYear 2026 uses the statutory 12%', () => {
-    expectClean(ppnRate(engine, ['2026'], 'PPN-RATE-2026'))
-  })
+  counterexample('taxYear 2026 uses the statutory 12%', () => ppnRate(engine, ['2026'], 'PPN-RATE-2026'))
 
   test('DPP + PPN = total; inclusive total equals the entered price', () => {
     expectClean(ppnSum(engine))

@@ -3,7 +3,7 @@ import { PPH23_RATES } from './constants'
 import { calculatePph23 } from './pph23'
 import { PPH23_ORACLE } from './check/oracle'
 import { brutoGrid } from './check/domain'
-import { expectClean, flatRate, nonPositiveBase, run } from './check/properties'
+import { counterexample, expectClean, flatRate, nonPositiveBase, run } from './check/properties'
 import type { PPh23ServiceType } from './pph23'
 import type * as UtilsModule from './utils'
 import type * as ConstantsModule from './constants'
@@ -11,19 +11,17 @@ import type * as ConstantsModule from './constants'
 type Engine = typeof calculatePph23
 const types = Object.keys(PPH23_RATES) as Array<PPh23ServiceType>
 const run23 = (engine: Engine) => (key: string, base: number) => engine({ serviceType: key as PPh23ServiceType, grossAmount: base, isFinal: false }).totalTax
-const confirmed = Object.entries(PPH23_ORACLE).filter(([, row]) => row.confidence === 'confirmed').map(([key, row]) => ({ key, bps: row.bps }))
+// jasaKonsultan is sourced too but disagrees with the engine: it is the counterexample below.
+const confirmed = Object.entries(PPH23_ORACLE).filter(([key, row]) => row.confidence === 'sourced' && key !== 'jasaKonsultan').map(([key, row]) => ({ key, bps: row.bps }))
 
 describe('PPh 23', () => {
-  test('rows confirmed against the regulations equal the oracle', () => {
+  test('sourced rows equal the oracle (jasa konsultan is the counterexample below)', () => {
     for (const { key, bps } of confirmed) expect(PPH23_RATES[key as PPh23ServiceType], key).toBe(bps)
     expectClean(flatRate('PPH23-ORACLE-RATES', run23(calculatePph23), confirmed))
   })
 
-  // COUNTEREXAMPLE, see RESULTS.md PPH23-KONSULTAN: constants.ts has 4% for jasa konsultan; PMK 141/PMK.03/2015 lists 2%.
-  // [INFERENCE] The regulation rate is from the checker's knowledge; Dika to confirm before any fix.
-  test.fails('jasa konsultan is 2%', () => {
-    expectClean(flatRate('PPH23-KONSULTAN', run23(calculatePph23), [{ key: 'jasaKonsultan', bps: PPH23_ORACLE.jasaKonsultan.bps }]), 1250)
-  })
+  // COUNTEREXAMPLE, see RESULTS.md PPH23-KONSULTAN: constants.ts has 4% for jasa konsultan; UU 36/2008 Pasal 23 ayat (1) huruf c angka 2 sets 2% for jasa konsultan.
+  counterexample('jasa konsultan is 2%', () => flatRate('PPH23-KONSULTAN', run23(calculatePph23), [{ key: 'jasaKonsultan', bps: PPH23_ORACLE.jasaKonsultan.bps }]))
 
   test('tax = bruto x rate rounded to the nearest rupiah, for every type', () => {
     expectClean(flatRate('PPH23-ROUNDING', run23(calculatePph23), types.map((key) => ({ key, bps: PPH23_RATES[key] }))))

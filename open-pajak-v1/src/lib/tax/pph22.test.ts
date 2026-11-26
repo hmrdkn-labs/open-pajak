@@ -8,18 +8,19 @@ import type { PPh22TransactionType } from './pph22'
 import type * as UtilsModule from './utils'
 import type * as ConstantsModule from './constants'
 
-// Only the rows in PPH22_ORACLE can be pinned to one flat rate. 'migas' and 'lainnya' are reported in RESULTS.md, not asserted.
-// Not modelled by the engine: the higher rate for a buyer without NPWP (RESULTS.md PPH22-NO-NPWP).
+// Only 'sourced' rows of PPH22_ORACLE are asserted. 'migas' and 'lainnya' are unverified and reported in RESULTS.md.
+// Not modelled by the engine: the higher rate for a buyer without NPWP (RESULTS.md NO-NPWP).
 
 type Engine = typeof calculatePph22
 const types = Object.keys(PPH22_RATES) as Array<PPh22TransactionType>
 const run22 = (engine: Engine) => (key: string, base: number) =>
   engine({ transactionType: key as PPh22TransactionType, transactionValue: base, otherCosts: 0, deduction: 0 }).totalTax
-const oracleRates = Object.entries(PPH22_ORACLE).map(([key, row]) => ({ key, bps: row.bps }))
+const sourced = Object.entries(PPH22_ORACLE).filter(([, row]) => row.confidence === 'sourced')
+const oracleRates = sourced.map(([key, row]) => ({ key, bps: row.bps }))
 
 describe('PPh 22', () => {
-  test('rows with a single regulation rate equal the oracle', () => {
-    for (const [key, row] of Object.entries(PPH22_ORACLE)) expect(PPH22_RATES[key as PPh22TransactionType], `${key}: ${row.note}`).toBe(row.bps)
+  test('sourced rows equal the oracle; unverified rows are skipped', () => {
+    for (const [key, row] of sourced) expect(PPH22_RATES[key as PPh22TransactionType], `${key}: ${row.note}`).toBe(row.bps)
     expectClean(flatRate('PPH22-ORACLE-RATES', run22(calculatePph22), oracleRates))
   })
 

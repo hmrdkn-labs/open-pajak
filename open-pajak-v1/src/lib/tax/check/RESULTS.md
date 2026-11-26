@@ -1,6 +1,6 @@
 # Bounded model check of the tax engines: results
 
-Run: `bun run test` from `open-pajak-v1/`, seed `20261126` (`domain.ts`). 65 tests, 6 files, about 25 s.
+Run: `bun run test` from `open-pajak-v1/`, seed `20261126` (`domain.ts`). 83 tests, 6 files, about 25 s.
 Every run prints one `[check] <ID> cases=N violations=V first: ...` line per property.
 
 What this verifies: the **engines** in `src/lib/tax/*.ts`, as pure functions, against an oracle
@@ -14,14 +14,22 @@ No engine, constant, UI or i18n file was changed. Fixes are a follow-up that Dik
 |---|---|
 | `Buku_PPh2126_Release_20240108.pdf` (115 pages; PDF page = printed page) | PPh 21/26: PTKP p.47-48, Pasal 17 p.39, TER Bulanan A/B/C p.40-42, TER Harian p.43, PKP rounding p.32, biaya jabatan p.60, biaya pensiun p.82, worked examples p.62-66, 71-73, 85, 89-93, 97-101, PPh 26 p.110-111 |
 | `tax-formulas-mapping.md` (repo) | `roundDown` for TER tax (see PPH21-TER-MASA-FLOOR) |
-| Regulations: UU 7/2021 (HPP), PMK 141/PMK.03/2015, PP 34/2016, PP 55/2022, PMK 34/PMK.010/2017 | PPN, PPh 22, 23, 4(2) rates. **[INFERENCE]** article numbers and rates come from the checker's knowledge, not from a document in the repo. Dika signs off each row marked `dika-to-confirm`; every row is listed in `oracle.ts` with its confidence. |
+| Official documents read on 2026-11-26 (URLs in `oracle.ts`, article per row) | PPN, PPh 22, 23, 4(2), PPnBM, see below. Documents were read as enacted; later amendments were not checked unless stated |
+
+| UU 7/2021 Pasal 7(1) and PMK 131/2024 Pasal 2-3 | PPN rates and DPP nilai lain |
+| PMK 34/PMK.010/2017 Pasal 2 | PPh 22 |
+| UU 36/2008 Pasal 23, PMK 141/PMK.03/2015 Pasal 1 | PPh 23 |
+| PP 34/2017 Pasal 4, PP 55/2022 Pasal 56, PP 9/2022 Pasal 3 | PPh 4(2) |
+| UU 42/2009 Pasal 7(1), Pasal 8(1) | PPN 10% until 31 Mar 2022, PPnBM range |
 
 PPh 21 rounding the guide is silent on: how many rupiah TER tax is rounded to, and half-rupiah rounding of
 biaya jabatan. The annual checks use inputs where 5% is exact; the TER rounding is reported both ways.
 
 ## Result per property
 
-VERIFIED = no violation in the stated cases. COUNTEREXAMPLE = first failing input shown (`test.fails` in the suite).
+VERIFIED = no violation in the stated cases. COUNTEREXAMPLE = first failing input shown. Each counterexample is two tests:
+an ordinary test that builds the domain, runs the engine and asserts the case count (so a vacuous run is red), and a
+`test.fails` that asserts only "zero tax violations" on that same report.
 
 ### Tables (exhaustive)
 
@@ -60,7 +68,7 @@ Bruto grid: 0, 1, 10^12, every TER ceiling -1/0/+1 of A, B, C, plus seeded log-u
 | PPH21-ANNUAL-MONOTONE | 10.000 | VERIFIED | more bruto never lowers annual tax |
 | PPH21-DECEMBER-NEAREST | 10.322 | VERIFIED | `december_adjustment` = annual - 11 x masa tax, when not negative |
 | PPH21-DECEMBER-FLOOR | 10.322 | COUNTEREXAMPLE (2.107) | same root cause as PPH21-TER-MASA-FLOOR: TK/0 bruto 5.495.920 bonus 37.295.060: engine December 2.053.010, oracle 2.053.021 |
-| PPH21-DECEMBER-NEGATIVE | 2.682 (of a zakat-heavy domain) | COUNTEREXAMPLE (all) | What the engine does when annual < Jan..Nov withheld: `adjustment = max(0, difference)`, the excess is shown as `overpaid` but `totalTax` stays at the 11 months withheld. Example TK/0 bruto 5.495.920, zakat 15.359.159: annual 0, engine totalTax 151.140. The guide refunds the excess (p.66 "lebih dipotong", note 1) |
+| PPH21-DECEMBER-NEGATIVE | 10.615 (distinct qualifying inputs: 8 statuses x 5.200 snapped bruto values with large zakat, filtered to annual < Jan..Nov withheld) | COUNTEREXAMPLE (all) | What the engine does when annual < Jan..Nov withheld: `adjustment = max(0, difference)`, the excess is shown as `overpaid` but `totalTax` stays at the 11 months withheld. Example TK/0 bruto 5.495.920, zakat 11.940.566: annual 0, engine totalTax 151.140. The guide refunds the excess (p.66 "lebih dipotong", note 1) |
 | PPH21-PARTIAL-YEAR | 10.000 | COUNTEREXAMPLE (6.474) | Fewer than 12 masa (guide p.65-66: Dec is the last masa and reconciles). Engine adds `months x TER` and never reconciles; biaya jabatan is capped at Rp6.000.000 instead of Rp500.000 x masa. Worked example p.65-66 (Tuan B, 4 x 15.500.000, TK/0, iuran 100.000): guide 280.000, engine 4.340.000. **Semantics open**: the engine's `monthsPaid` may mean something other than "last masa is December" |
 | PPH21-BOUNDS | 80.000 | VERIFIED | 0 <= tax <= bruto, 0 bruto gives 0 tax, all 8 subject types, TER and lama |
 | PPH21-NEGATIVE-INPUT | 80.000 | COUNTEREXAMPLE (14.240) | `wpln` and daily `pegawai_tidak_tetap` return negative tax for negative bruto: wpln bruto -3 gives tax -1. The other subject types clamp to 0 |
@@ -78,42 +86,44 @@ Subject types covered: all 8 in `PPh21SubjectType`. Skipped within them: `pegawa
 
 ### PPN and PPnBM (10.000 cases per property)
 
+Documents read: UU 7/2021 Pasal 7(1) (11% from 1 Apr 2022, 12% "paling lambat 1 Januari 2025"); PMK 131/2024 Pasal 2(2)-(3), 3(2)-(3), 5, 6 (12% from 1 Jan 2025; Pasal 2 luxury goods: 12% x full DPP; Pasal 3 all other BKP/JKP: 12% x DPP nilai lain = 11/12 of harga jual); UU 42/2009 Pasal 7(1) (10% until the HPP rate) and Pasal 8(1) (PPnBM 10%-200%).
+
 | ID | Result | Note |
 |---|---|---|
-| PPN-RATE-UI-YEARS | VERIFIED | 2022-2025 map to 11, 11, 11, 12%, exclusive and inclusive. Caveat: 1 Jan-31 Mar 2022 was still 10%; a year-granular engine cannot represent that |
-| PPN-RATE-2026 | COUNTEREXAMPLE (9.889) | **What happens for 2026:** `PPN_RATES_PER_YEAR` has no `'2026'` key; `ppn.ts:28` falls back to the `'2024'` entry, 11%. The UI offers only 2022-2025 and defaults to `'2024'` (`routes/ppn.tsx:27`). Statutory 2026 rate is 12% (UU 7/2021, from 1 Jan 2025): year 2026 base 13: engine 1, oracle 2 |
+| PPN-RATE-UI-YEARS | VERIFIED, with scope | 2022-2025 map to 11, 11, 11, 12% on the full DPP. Scope: 2022 is 10% until 31 Mar 2022 (UU 42/2009 Pasal 7(1)), the engine is year-granular. 2025 at 12% on the full DPP matches PMK 131/2024 Pasal 2 (luxury goods) only; for Pasal 3 goods the effective rate is 11% of the price (open question below) |
+| PPN-RATE-2026 | COUNTEREXAMPLE (9.889) | **What happens for 2026:** `PPN_RATES_PER_YEAR` has no `'2026'` key; `ppn.ts:28` falls back to the `'2024'` entry, 11%. The UI offers only 2022-2025 and defaults to `'2024'` (`routes/ppn.tsx:27`). UU 7/2021 Pasal 7(1) huruf b and PMK 131/2024 Pasal 2(2), 3(2) give 12% (no end date in PMK 131/2024). Year 2026 base 13: engine 1, oracle 2 |
 | PPN-DPP-PLUS-PPN-IS-TOTAL | VERIFIED | DPP + PPN = total; inclusive total = entered price |
 | PPN-ROUND-TRIP | VERIFIED | exclusive then inclusive returns the DPP within Rp1 |
 | PPN-NON-POSITIVE | VERIFIED | zero and negative bases owe 0 |
 | PPN-CUSTOM-RATE | VERIFIED | `customRate` is a percent |
-| PPNBM-ROUNDING | VERIFIED | arithmetic at the engine's own rates; **the rates themselves are not verified** |
-| PPNBM-CUSTOM-RATE | VERIFIED | custom percent against the oracle |
+| PPNBM-RANGE | VERIFIED | all four goods rates lie within 10%-200% (UU 42/2009 Pasal 8(1)). **Each goods rate itself is unverified**: Pasal 8(3) delegates it to a PMK that was not read |
+| PPNBM-ROUNDING, PPNBM-CUSTOM-RATE | VERIFIED | arithmetic at the engine's own rates; custom percent against the oracle |
 | PPNBM-NEGATIVE | COUNTEREXAMPLE (9.979) | `ppnbm.ts` does not clamp: kendaraanMewah DPP -8 gives tax -1 |
 
-**OPEN TAX QUESTION, not decided here:** PMK 131/2024 "DPP nilai lain 11/12". From 1 Jan 2025 the statutory PPN rate is 12%,
-and PMK 131/2024 sets DPP nilai lain at 11/12 of the price for most goods and services, which makes the effective rate 11% on the full price.
-The engine has no DPP-nilai-lain switch. Whether the 2025/2026 default should be 12% on DPP, 11% effective, or a user choice is for Dika.
-The tests compare against the statutory 12% and mark 2026 as a counterexample; they do not claim 12% is the right default.
+**OPEN TAX QUESTION, not decided here:** PMK 131/2024 DPP nilai lain 11/12. The read text says the 12% rate applies to the full price only for luxury goods
+(Pasal 2); for every other BKP/JKP it applies to 11/12 of the price (Pasal 3), i.e. 11% effective. The engine has no DPP-nilai-lain switch and no luxury/non-luxury input.
+Whether the 2025/2026 default should be 12% on DPP, 11% effective, or a user choice is for Dika. The tests compare against the 12% tarif and mark 2026 as a counterexample;
+they do not claim that is the right default. PMK 131/2024 was read as enacted; the later PMK 11/2025 was not read.
 
 ### PPh 22, 23, 4(2) (10.000 cases per property)
 
-| ID | Result | Note |
+| ID | Result | Source / note |
 |---|---|---|
-| PPH22-ORACLE-RATES | VERIFIED | impor 2,5% (importer with API), bumn 1,5% |
-| PPH22-ROUNDING, PPH22-DPP, PPH22-NON-POSITIVE | VERIFIED | nearest-rupiah rounding, DPP = max(0, value + other - deduction), non-positive base gives 0 |
-| PPH23-ORACLE-RATES | VERIFIED | jasaTeknik 2%, sewaAlat 2%, dividen 15%, bunga 15% |
-| PPH23-KONSULTAN | COUNTEREXAMPLE (9.974) | `constants.ts` has 4% for jasa konsultan; PMK 141/PMK.03/2015 lists 2% **[INFERENCE, Dika to confirm]**. Base 13: engine 1, 2% gives 0 |
+| PPH22-ORACLE-RATES | VERIFIED (sourced rows only) | impor 2,5%: PMK 34/2017 Pasal 2(1) a.1.d (with API; without API 7,5% huruf e, not modelled). bumn 1,5%: Pasal 2(1) b (buyers of Pasal 1(1) b-e) |
+| PPH22 migas, lainnya | UNVERIFIED | `migas` 2%: Pasal 2(1) c lists 0,25% and 0,3% for fuel, gas, lubricants, no 2% row found. `lainnya` 1,5%: names no transaction. Not asserted |
+| PPH22-ROUNDING, PPH22-DPP, PPH22-NON-POSITIVE | VERIFIED | arithmetic: nearest-rupiah rounding, DPP = max(0, value + other - deduction), non-positive base gives 0 |
+| PPH23-ORACLE-RATES | VERIFIED (sourced rows only) | UU 36/2008 Pasal 23(1): jasaTeknik 2% (huruf c angka 2), sewaAlat 2% (c angka 1), dividen 15% (a angka 1), bunga 15% (a angka 2) |
+| PPH23-KONSULTAN | COUNTEREXAMPLE (9.974) | `constants.ts` 4%; UU 36/2008 Pasal 23(1) huruf c angka 2 lists "jasa konsultan" at 2%. Base 13: engine 1, 2% gives 0. Read as enacted; later amendments not checked |
 | PPH23-ROUNDING, FINAL-FLAG, NON-POSITIVE | VERIFIED | `isFinal` only changes the note |
-| PPH4_2-ORACLE-RATES | VERIFIED | sewaTanah 10%, umkmFinal 0,5% |
+| PPH4_2-ORACLE-RATES | VERIFIED (sourced rows only) | sewaTanah 10%: PP 34/2017 Pasal 4(1). umkmFinal 0,5%: PP 55/2022 Pasal 56(2) (time limits and Rp500 juta threshold of Pasal 57-59 not modelled) |
+| PPH4_2-KONSTRUKSI | VERIFIED (membership) | rate depends on provider class, PP 9/2022 Pasal 3(1) a-g: 1,75 / 4 / 2,65 / 2,65 / 4 / 3,5 / 6%. The engine's 3,5% is huruf f (konsultansi konstruksi with a sertifikat). Only membership in the legal set is asserted; the engine cannot choose a class |
+| PPH4_2 restoran | UNVERIFIED | 5%: no document read supports a PPh 4(2) rate for restoran. Not asserted |
 | PPH4_2-ROUNDING, NON-POSITIVE | VERIFIED | |
 
-Not verified, reported:
+Not modelled by the engines (documented gaps, not counterexamples of a rate):
 
-- PPh 22 `migas` (2%) and `lainnya` (1,5%): no single flat rate in the regulations the checker knows.
-- PPh 4(2) `konstruksi` (3,5%): the rate depends on the contractor class; `restoran` (5%): restaurant tax is a regional tax (PB1), not PPh 4(2). Both need Dika's tax review.
-- PPnBM `kendaraanMewah` 20%, `perhiasan` 30%, `kapalPesiar` 75%, `elektronikPremium` 25%: no source in the repo; not asserted.
-- Higher rate for a withholdee or buyer without NPWP (PPh 22, PPh 23: 100% higher): **not modelled** by the engines, no input for it.
-- PPh 22 import without API (7,5%): not modelled. PPh 4(2) UMKM Rp500 juta threshold: not modelled.
+- Higher rate (+100%) for a buyer or withholdee without NPWP: PMK 34/2017 Pasal 2(4) (PPh 22), UU 36/2008 Pasal 23(1a) and PMK 141/PMK.03/2015 Pasal 1(7) (PPh 23). No input for it.
+- PPh 22 import without API (7,5%), other import classes (10%, 0,5%).
 - The lama scheme deducts zakat too, though the guide's lama formula (p.61) lists none; the checks use zero zakat in lama.
 - Sub-rupiah rounding of biaya jabatan (5% of an odd bruto): the guide is silent; avoided by snapping inputs.
 

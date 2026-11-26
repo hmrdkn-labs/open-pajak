@@ -1,24 +1,29 @@
 import { describe, expect, test, vi } from 'vitest'
 import { PPH4_2_RATES } from './constants'
 import { calculatePph4 } from './pph4_2'
-import { PPH4_2_ORACLE } from './check/oracle'
+import { PP9_2022_KONSTRUKSI_BPS, PPH4_2_ORACLE } from './check/oracle'
 import { expectClean, flatRate, nonPositiveBase } from './check/properties'
 import type { PPh4Objek } from './pph4_2'
 import type * as UtilsModule from './utils'
 import type * as ConstantsModule from './constants'
 
-// 'konstruksi' (rate depends on the contractor class) and 'restoran' (restaurant tax is a regional tax, not PPh 4(2))
-// cannot be pinned to one regulation rate; they are reported in RESULTS.md (PPH4_2-UNVERIFIED), not asserted.
+// 'konstruksi' is class-dependent (PP 9/2022 Pasal 3(1)): only membership of the legal rate set is asserted.
+// 'restoran' has no source read: unverified, reported in RESULTS.md, not asserted.
 
 type Engine = typeof calculatePph4
 const objects = Object.keys(PPH4_2_RATES) as Array<PPh4Objek>
 const run42 = (engine: Engine) => (key: string, base: number) => engine({ objectType: key as PPh4Objek, grossAmount: base }).totalTax
-const oracleRates = Object.entries(PPH4_2_ORACLE).map(([key, row]) => ({ key, bps: row.bps }))
+const sourced = Object.entries(PPH4_2_ORACLE).filter(([, row]) => row.confidence === 'sourced')
+const oracleRates = sourced.map(([key, row]) => ({ key, bps: row.bps }))
 
 describe('PPh Final 4(2)', () => {
-  test('rows with a single regulation rate equal the oracle', () => {
-    for (const [key, row] of Object.entries(PPH4_2_ORACLE)) expect(PPH4_2_RATES[key as PPh4Objek], `${key}: ${row.note}`).toBe(row.bps)
+  test('sourced rows equal the oracle; unverified rows are skipped', () => {
+    for (const [key, row] of sourced) expect(PPH4_2_RATES[key as PPh4Objek], `${key}: ${row.note}`).toBe(row.bps)
     expectClean(flatRate('PPH4_2-ORACLE-RATES', run42(calculatePph4), oracleRates))
+  })
+
+  test('konstruksi rate is one of the PP 9/2022 Pasal 3(1) rates (class-dependent)', () => {
+    expect(PP9_2022_KONSTRUKSI_BPS).toContain(PPH4_2_RATES.konstruksi)
   })
 
   test('tax = bruto x rate rounded to the nearest rupiah, for every object', () => {

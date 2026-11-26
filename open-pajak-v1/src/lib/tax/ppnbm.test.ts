@@ -1,12 +1,13 @@
 import { describe, expect, test, vi } from 'vitest'
 import { PPNBM_RATES } from './constants'
 import { calculatePpnbm } from './ppnbm'
-import { expectClean, flatRate, nonPositiveBase } from './check/properties'
+import { PPNBM_RANGE_BPS } from './check/oracle'
+import { counterexample, expectClean, flatRate, nonPositiveBase } from './check/properties'
 import type { PpnbmGoods } from './ppnbm'
 import type * as UtilsModule from './utils'
 
-// No source in the repo or the guide pins the PPnBM rates (RESULTS.md PPNBM-RATES): these tests check the
-// arithmetic (rate x base, rounding, clamps) at whatever rate the engine holds, and custom rates against the oracle.
+// UU 42/2009 Pasal 8(1) gives only a 10%-200% range; the per-goods rates come from a PMK that was not read
+// (RESULTS.md PPNBM-RATES, unverified). These tests check the range, the arithmetic and the clamps.
 
 type Engine = typeof calculatePpnbm
 const goods = Object.keys(PPNBM_RATES) as Array<PpnbmGoods>
@@ -15,6 +16,13 @@ const byGoods = (engine: Engine) => (key: string, base: number) => engine({ good
 const byCustom = (engine: Engine) => (key: string, base: number) => engine({ goodsType: 'perhiasan', dppPpn: base, customRate: Number(key) }).totalTax
 
 describe('PPnBM', () => {
+  test('every goods rate lies in the UU 42/2009 Pasal 8(1) range of 10% to 200%', () => {
+    for (const { key, bps } of engineRates) {
+      expect(bps, key).toBeGreaterThanOrEqual(PPNBM_RANGE_BPS.min)
+      expect(bps, key).toBeLessThanOrEqual(PPNBM_RANGE_BPS.max)
+    }
+  })
+
   test('tax = DPP x rate, rounded to the nearest rupiah, for each goods type', () => {
     expectClean(flatRate('PPNBM-ROUNDING', byGoods(calculatePpnbm), engineRates))
   })
@@ -25,9 +33,7 @@ describe('PPnBM', () => {
   })
 
   // COUNTEREXAMPLE, see RESULTS.md PPNBM-NEGATIVE: ppnbm.ts does not clamp dppPpn, so a negative DPP gives a negative tax.
-  test.fails('a negative DPP owes nothing', () => {
-    expectClean(nonPositiveBase('PPNBM-NEGATIVE', byGoods(calculatePpnbm), goods))
-  })
+  counterexample('a negative DPP owes nothing', () => nonPositiveBase('PPNBM-NEGATIVE', byGoods(calculatePpnbm), goods))
 })
 
 describe('negative controls: mutants must be rejected', () => {

@@ -1,7 +1,7 @@
-import i18n from '../../i18n/config'
 import { PPN_RATES_PER_YEAR, RATE_SCALE } from './constants'
 import { applyRate, rateBpsToPercent } from './utils'
 import type { TaxResult } from './types'
+import i18n from '../../i18n/config'
 
 export interface PpnInput {
   taxYear: string
